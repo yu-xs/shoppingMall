@@ -20,15 +20,6 @@ export default defineConfig({
     },
   },
   server: {
-    // middleware: [
-    //   createProxyMiddleware('/api', {
-    //     target: 'https://m.mi.com',
-    //     changeOrigin: true,
-    //     onProxyReq: (proxyReq: any, req: any, res: any) => {
-    //       proxyReq.setHeader('Referer', 'https://m.mi.com/?spmref=MiShop_M.cms_19106.3814597.1&scmref=cms.0.0.0.0.0.0.0');
-    //     },
-    //   }),
-    // ],
     proxy: {
       '/api': {
         target: 'https://m.mi.com',

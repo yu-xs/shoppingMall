@@ -1,5 +1,4 @@
 <template>
-    <!-- https://m.mi.com/v1/home/page -->
     <div class="recommend">
         <div class="banner">
             <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#82A99F">

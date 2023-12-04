@@ -9,7 +9,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: HomeView,
       children: [
@@ -39,6 +39,12 @@ const router = createRouter({
           component: () => import('../views/HomeViewChild/NotebookView.vue')
         },
       ],
+    },
+    {
+      //没写就是任意路由都是定向这个
+      path: '',
+      //重定向
+      redirect: '/home'
     },
     {
       path: '/channel',

@@ -37,10 +37,12 @@ onMounted(() => {
     </div>
 
     <!-- 顶部导航栏 -->
-    <van-tabs background="transparent" color="#60627D" title-active-color="#60627D" animated>
-      <van-tab v-for="(i, index) in  navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
-        <RouterView />
-      </van-tab>
+    <van-tabs background="transparent" color="#60627D" title-active-color="#60627D" animated> 
+      <keep-alive>
+        <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
+          <router-view />
+        </van-tab>
+      </keep-alive>
     </van-tabs>
   </div>
 </template>
@@ -88,13 +90,13 @@ onMounted(() => {
     }
   }
 
-  .van-tabs::before{
-    position: absolute;
-    top: 42px;
-    content: "";
-    width: 92vw;
-    height: 2px;
-    background-color: #ccc;
-  }
+  // .van-tabs::before{
+  //   position: absolute;
+  //   top: 42px;
+  //   content: "";
+  //   width: 92vw;
+  //   height: 2px;
+  //   background-color: #ccc;
+  // }
 }
 </style>
