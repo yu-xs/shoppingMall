@@ -90,7 +90,7 @@ onMounted(() => {
 
   .van-tabs::before{
     position: absolute;
-    bottom: 16px;
+    top: 42px;
     content: "";
     width: 92vw;
     height: 2px;
