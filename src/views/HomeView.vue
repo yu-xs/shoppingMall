@@ -7,9 +7,10 @@ let childArr = ref(['recommend', 'smart', 'radio', 'homeAppliance', 'notebook'])
 let navBarList = ref([]);
 
 async function getNavBar() {
-  const navBar = await axios.get("https://apis.netstart.cn/xmsc/home/page");
+  // const navBar = await axios.get("https://apic.netstart.cn/xmsc/home/page");
+  const data = await axios.post("/api/v1/home/page");
 
-  navBarList.value = navBar.data.data.tabs;
+  navBarList.value = data.data.data.tabs;
   console.log(navBarList.value);
 }
 
@@ -37,7 +38,7 @@ onMounted(() => {
     </div>
 
     <!-- 顶部导航栏 -->
-    <van-tabs background="transparent" color="#60627D" title-active-color="#60627D" animated> 
+    <van-tabs background="#82A99F" color="#60627D" title-active-color="#60627D" animated sticky>
       <keep-alive>
         <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
           <router-view />
@@ -48,18 +49,23 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+::-webkit-scrollbar {
+  display: none;
+}
+
 .home {
   width: 100vw;
   height: 100vh;
   position: relative;
   overflow: hidden;
+  overflow-y: scroll;
   background-color: rgb(250, 250, 250);
   z-index: 0;
-  padding: 0 15px;
+  padding: 0 5px;
   box-sizing: border-box;
 
   .bg {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;

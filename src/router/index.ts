@@ -39,12 +39,13 @@ const router = createRouter({
           component: () => import('../views/HomeViewChild/NotebookView.vue')
         },
       ],
+      redirect: '/home/recommend'
     },
     {
       //没写就是任意路由都是定向这个
-      path: '',
+      path: '/',
       //重定向
-      redirect: '/home'
+      redirect: '/home/recommend'
     },
     {
       path: '/channel',
