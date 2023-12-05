@@ -130,7 +130,7 @@ async function getDataList() {
     // 以旧换新
     upgradePlaybill.value = data.data.data.data.sections[35].body.items;
 
-    console.log(upgradePlaybill);
+    console.log(data.data.data.data);
 
 }
 
@@ -139,7 +139,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .recommend {
     .banner {
         border-radius: 15px;
