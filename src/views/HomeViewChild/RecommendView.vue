@@ -24,7 +24,19 @@
             </div>
         </div>
 
-        <div class="goods"></div>
+        <!-- 商品列表 -->
+        <ul class="goods" v-if="goodsList.length > 0">
+            <li v-for="i in goodsList" :key="i.product_id">
+                <img :src="`${i.img_url}`" />
+                <div class="msg">
+                    <p class="title">{{ i.product_name }}</p>
+                    <p class="description">{{ i.product_brief }}</p>
+                    <p class="price">￥{{ i.product_price }}起</p>
+                    <button class="buy">立即购买</button>
+                </div>
+            </li>
+            <div class="more">更多手机产品<van-icon name="arrow" /></div>
+        </ul>
     </div>
 </template>
 
@@ -33,10 +45,11 @@ import { ref, inject, onMounted } from 'vue'
 let bannerList = ref([]);
 let categoryList = ref([]);
 let bigImgList = ref([]);
+let goodsList = ref([]);
 
 const axios = inject("$axios");
 
-async function getBannerList() {
+async function getDataList() {
     console.log('请求数据')
     const data = await axios.post("/api/v1/home/page");
     // 轮播图数据
@@ -47,12 +60,17 @@ async function getBannerList() {
     categoryList.value = category1.concat(category2);
     // 大图商品数据
     bigImgList.value = data.data.data.data.sections[4].body.items;
-    console.log(bigImgList);
+    // 商品数据
+    const goods1 = data.data.data.data.sections[6].body.items;
+    const goods2 = data.data.data.data.sections[8].body.items;
+    const goods3 = data.data.data.data.sections[10].body.items;
+    goodsList.value = [...goods1, ...goods2, ...goods3];
+    console.log(goodsList);
 
 }
 
 onMounted(() => {
-    getBannerList();
+    getDataList();
 })
 </script>
 
@@ -90,7 +108,7 @@ onMounted(() => {
     .bigImg {
         width: 100%;
         height: 265px;
-        background-color: white;
+        background-color: rgb(250, 250, 250);
         display: flex;
         justify-content: space-between;
         border-radius: 5px;
@@ -104,6 +122,7 @@ onMounted(() => {
 
         .left img {
             width: 100%;
+            height: 100%;
             border-radius: 5px;
         }
 
@@ -112,19 +131,89 @@ onMounted(() => {
             flex-direction: column;
             flex: 0 1 49%;
             height: 100%;
+            box-sizing: border-box;
         }
 
         .right img {
             width: 100%;
+            height: 100%;
             height: 50%;
             border-radius: 5px;
-            margin-bottom: 5px;
+        }
+
+        .right img:first-child {
+            margin-bottom: 8px;
         }
     }
 
-    .goods{
+    .goods {
         width: 100%;
-        height: 300px;
+        background-color: rgb(250, 250, 250);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .goods li {
+        text-align: center;
+        flex: 0 1 49%;
+        margin-bottom: 5px;
+    }
+
+    .goods li img {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .goods li .msg {
+        font-size: 14px;
+
+        .description {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .title,
+        .description {
+            padding: 0 12px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            width: 178px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .price {
+            font-size: 13px;
+            color: red;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        button {
+            border: none;
+            padding: 8px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #698FCB;
+            color: rgb(250, 250, 250);
+        }
+    }
+
+    .goods .more {
+        width: 100%;
+        height: 5vh;
+        line-height: 5vh;
+        text-align: center;
+        font-style: italic;
+        font-weight: lighter;
+
+        i {
+            font-style: italic;
+        }
     }
 }
 </style>

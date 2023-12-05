@@ -62,6 +62,7 @@ onMounted(() => {
   background-color: rgb(250, 250, 250);
   z-index: 0;
   padding: 0 5px;
+  padding-bottom: 48px;
   box-sizing: border-box;
 
   .bg {
