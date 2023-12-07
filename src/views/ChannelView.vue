@@ -20,19 +20,48 @@
                     <swiper-slide>
                         <RecommendComponent />
                     </swiper-slide>
-                    <swiper-slide>Slide 2</swiper-slide>
-                    <swiper-slide>Slide 3</swiper-slide>
-                    <swiper-slide>Slide 4</swiper-slide>
-                    <swiper-slide>Slide 5</swiper-slide>
-                    <swiper-slide>Slide 6</swiper-slide>
-                    <swiper-slide>Slide 7</swiper-slide>
-                    <swiper-slide>Slide 8</swiper-slide>
-                    <swiper-slide>Slide 9</swiper-slide>
-                    <swiper-slide>Slide 10</swiper-slide>
-                    <swiper-slide>Slide 11</swiper-slide>
-                    <swiper-slide>Slide 12</swiper-slide>
-                    <swiper-slide>Slide 13</swiper-slide>
-                    <swiper-slide>Slide 14</swiper-slide>
+                    <swiper-slide>
+                        <XiaomiPhoneComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <redmiPhoneComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <partsComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <computerComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <smartComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <radioComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <homeAppliancesComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <smallHomeAppliancesComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <smartHomeComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <travelComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <commodityComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <childrenComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <featureComponent />
+                    </swiper-slide>
+                    <swiper-slide>
+                        <serviceComponent />
+                    </swiper-slide>
                 </swiper>
             </div>
         </div>
@@ -42,6 +71,21 @@
 <script setup>
 // 引入组件, 不用注册
 import RecommendComponent from '../components/Category_recommend.vue'
+import XiaomiPhoneComponent from '../components/Category_xiaomi.vue'
+import redmiPhoneComponent from '../components/Category_redmi.vue'
+import partsComponent from '../components/Category_parts.vue'
+import computerComponent from '../components/Category_computer.vue'
+import smartComponent from '../components/Category_smart.vue'
+import radioComponent from '../components/Category_radio.vue'
+import homeAppliancesComponent from '../components/Category_homeAppliances.vue'
+import smallHomeAppliancesComponent from '../components/Category_smallHomeAppliances.vue'
+import smartHomeComponent from '../components/Category_smartHome.vue'
+import travelComponent from '../components/Category_travel.vue'
+import commodityComponent from '../components/Category_commodity.vue'
+import childrenComponent from '../components/Category_children.vue'
+import featureComponent from '../components/Category_feature.vue'
+import serviceComponent from '../components/Category_service.vue'
+
 
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -189,6 +233,11 @@ onMounted(() => {
     .swiper {
         width: 100%;
         height: 100%;
+    }
+
+    .swiper .swiper-slide {
+        overflow: hidden;
+        overflow-y: scroll;
     }
 }
 </style>

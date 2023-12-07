@@ -7,7 +7,22 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Category_children: typeof import('./src/components/Category_children.vue')['default']
+    Category_commodity: typeof import('./src/components/Category_commodity.vue')['default']
+    Category_computer: typeof import('./src/components/Category_computer.vue')['default']
+    Category_feature: typeof import('./src/components/Category_feature.vue')['default']
+    Category_homeAppliances: typeof import('./src/components/Category_homeAppliances.vue')['default']
+    Category_homeApplience: typeof import('./src/components/Category_homeApplience.vue')['default']
+    Category_parts: typeof import('./src/components/Category_parts.vue')['default']
+    Category_radio: typeof import('./src/components/Category_radio.vue')['default']
     Category_recommend: typeof import('./src/components/Category_recommend.vue')['default']
+    Category_redmi: typeof import('./src/components/Category_redmi.vue')['default']
+    Category_service: typeof import('./src/components/Category_service.vue')['default']
+    Category_smallHomeAppliances: typeof import('./src/components/Category_smallHomeAppliances.vue')['default']
+    Category_smart: typeof import('./src/components/Category_smart.vue')['default']
+    Category_smartHome: typeof import('./src/components/Category_smartHome.vue')['default']
+    Category_travel: typeof import('./src/components/Category_travel.vue')['default']
+    Category_xiaomi: typeof import('./src/components/Category_xiaomi.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']

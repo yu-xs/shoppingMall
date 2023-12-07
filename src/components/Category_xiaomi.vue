@@ -16,17 +16,37 @@
                 </div>
             </li>
         </ul>
-        <ul class="gridList" v-if="dataList.length > 0">
-            <li v-for="i in dataList[3].body.items">
-                <img :src="`${i.img_url}`" />
-                <p class="title">{{ i.product_name }}</p>
+        <ul class="goodsList" v-if="dataList.length > 0">
+            <p class="title">{{ dataList[3].body.category_name }}</p>
+            <li v-for="i in dataList[4].body.product_list">
+                <div class="left">
+                    <img :src="`${i.puzzle_url}`" />
+                </div>
+                <div class="right">
+                    <p class="title">{{ i.name }}</p>
+                    <span class="price">￥<b>{{ i.price }}</b> 起</span>
+                    <span class="label" v-if="i.labels" v-for="item in i.labels">{{ item }}</span>
+                </div>
+            </li>
+        </ul>
+        <ul class="goodsList" v-if="dataList.length > 0">
+            <p class="title">{{ dataList[5].body.category_name }}</p>
+            <li v-for="i in dataList[6].body.product_list">
+                <div class="left">
+                    <img :src="`${i.puzzle_url}`" />
+                </div>
+                <div class="right">
+                    <p class="title">{{ i.name }}</p>
+                    <span class="price">￥<b>{{ i.price }}</b> 起</span>
+                    <span class="label" v-if="i.labels" v-for="item in i.labels">{{ item }}</span>
+                </div>
             </li>
         </ul>
     </div>
 </template>
 
 <script setup>
-import { ref, reactive, inject, watch, onMounted } from 'vue'
+import { ref, inject, onMounted } from 'vue'
 
 let dataList = ref([]);
 
@@ -35,7 +55,7 @@ const axios = inject("$axios");
 async function getDataList() {
     console.log('请求数据')
     // 分类数据
-    const data = await axios.post(`/api/v1/home/category_v2?cat_id=-1`);
+    const data = await axios.post(`/api/v1/home/category_v2?cat_id=1242`);
 
     dataList.value = data.data.data[0].category_list;
     console.log(dataList.value);
@@ -87,6 +107,7 @@ onMounted(() => {
             width: 100%;
             height: 70px;
             vertical-align: bottom;
+            border-radius: 5px;
         }
 
         .right {
@@ -101,10 +122,12 @@ onMounted(() => {
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .right .price b{
+
+        .right .price b {
             font-weight: bold;
         }
-        .right .label{
+
+        .right .label {
             font-size: 10px;
             vertical-align: 3px;
             margin-left: 10px;
