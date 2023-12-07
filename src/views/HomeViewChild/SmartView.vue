@@ -212,7 +212,7 @@ onMounted(() => {
     .playBill {
         width: 100%;
         background-color: rgb(250, 250, 250);
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         border-radius: 5px;
 
         img {

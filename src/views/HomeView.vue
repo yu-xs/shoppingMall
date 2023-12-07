@@ -39,11 +39,11 @@ onMounted(() => {
 
     <!-- 顶部导航栏 -->
     <van-tabs background="#82A99F" color="#60627D" title-active-color="#60627D" animated sticky>
-      <keep-alive>
-        <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
+      <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
+        <keep-alive>
           <router-view />
-        </van-tab>
-      </keep-alive>
+        </keep-alive>
+      </van-tab>
     </van-tabs>
   </div>
 </template>

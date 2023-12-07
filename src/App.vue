@@ -65,7 +65,7 @@ function activeIndex(i) {
   }
 
   a span.active {
-    color: #60627D;
+    color: #82A99F;
   }
 }
 </style>
