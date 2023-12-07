@@ -1,6 +1,4 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-
 import { ref, reactive, onMounted } from 'vue';
 
 let isActive = ref(0);

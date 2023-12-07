@@ -30,7 +30,7 @@ onMounted(() => {
         <img src="../../public/images/logo.png" />
       </div>
       <div class="searchInp">
-        <van-search shape="round" background="transparent" placeholder="请输入搜索关键词" />
+        <van-search shape="round" background="transparent" placeholder="请输入搜索关键词" :to="{ name: 'search' }" />
       </div>
       <div class="user">
         <img src="../../public/images/icon-user.png" />

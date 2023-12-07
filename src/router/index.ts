@@ -4,6 +4,7 @@ import ChannelView from '../views/ChannelView.vue'
 import MiCircleView from '../views/MiCircleView.vue'
 import CartView from '../views/CartView.vue'
 import UserView from '../views/UserView.vue'
+import SearchView from '../views/SearchView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +67,12 @@ const router = createRouter({
       path: '/user',
       name: 'user',
       component: UserView
+    },
+    // 搜索
+    {
+      path: '/search',
+      name: 'search',
+      component: SearchView
     },
   ]
 })
