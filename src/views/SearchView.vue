@@ -6,13 +6,13 @@
             <van-icon name="search" />
         </div>
         <ul class="searchRes" v-show="searchVal">
-            <li v-for="i in searchResList" :key="i.log_code">{{ i.title }}</li>
+            <li v-for="i in searchResList" :key="i.log_code" @click="goSearchPage(i.title)">{{ i.title }}</li>
         </ul>
 
         <div class="search-discover">
             <p>搜索发现</p>
             <ul class="search-list">
-                <li v-for="i in discoverList" :key="i.id">{{ i.desc }}</li>
+                <li v-for="i in discoverList" :key="i.id" @click="setSearchVal(i.desc)">{{ i.desc }}</li>
             </ul>
         </div>
     </div>
@@ -44,6 +44,21 @@ async function getSearchResList(value) {
     console.log(searchResList.value);
 }
 
+// 搜索发现
+function setSearchVal(value) {
+    console.log(value);
+    searchVal.value = value;
+    goSearchPage(value);
+}
+
+// 跳转搜索详情页
+function goSearchPage(searchVal) {
+    console.log(searchVal);
+
+    // 跳转
+    $router.push({ name: 'searchPage', params: { value: searchVal } });
+}
+
 // 返回
 function goBack() {
     $router.go(-1);
@@ -63,6 +78,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .search {
+    height: 100vh;
+    background-color: white;
 
     .searchBox {
         position: relative;
@@ -122,9 +139,15 @@ onMounted(() => {
         background-color: rgb(250, 250, 250);
 
         li {
-            padding: 15px 0;
-            border-bottom: 1px solid #ccc;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(204, 204, 204, 0.3);
             box-sizing: border-box;
+
+            color: #333;
+            font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 }

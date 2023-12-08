@@ -1,4 +1,5 @@
 <script setup>
+import navComponents from '../components/bottom-navBar/navComponents.vue'
 import { inject, onMounted, reactive, ref } from "vue";
 
 const axios = inject("$axios");
@@ -21,6 +22,11 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- 预加载图 -->
+  <div class="loading" v-show="!(navBarList.length > 0)">
+    <img src="../assets/loading.gif" />
+  </div>
+
   <div class="home">
     <div class="bg"></div>
 
@@ -39,11 +45,11 @@ onMounted(() => {
 
     <!-- 顶部导航栏 -->
     <van-tabs background="#82A99F" color="#60627D" title-active-color="#60627D" animated sticky>
-      <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
-        <keep-alive>
+      <keep-alive>
+        <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
           <router-view />
-        </keep-alive>
-      </van-tab>
+        </van-tab>
+      </keep-alive>
     </van-tabs>
   </div>
 </template>
@@ -51,6 +57,22 @@ onMounted(() => {
 <style lang="scss" scoped>
 ::-webkit-scrollbar {
   display: none;
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding-top: 100px;
+  box-sizing: border-box;
+  background-color: white;
+  z-index: 1000;
+
+  img {
+    width: 100%;
+  }
 }
 
 .home {

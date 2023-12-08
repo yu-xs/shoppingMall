@@ -5,6 +5,7 @@ import MiCircleView from '../views/MiCircleView.vue'
 import CartView from '../views/CartView.vue'
 import UserView from '../views/UserView.vue'
 import SearchView from '../views/SearchView.vue'
+import SearchPageView from '../views/SearchPageView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,26 +18,46 @@ const router = createRouter({
         {
           path: 'recommend',
           name: 'recommend',
+          meta: {
+            title: "推荐",
+            isTab: true,
+          },
           component: () => import('../views/HomeViewChild/RecommendView.vue')
         },
         {
           path: 'smart',
           name: 'smart',
+          meta: {
+            title: "智能",
+            isTab: true,
+          },
           component: () => import('../views/HomeViewChild/SmartView.vue')
         },
         {
           path: 'radio',
           name: 'radio',
+          meta: {
+            title: "电视",
+            isTab: true,
+          },
           component: () => import('../views/HomeViewChild/RadioView.vue')
         },
         {
           path: 'homeAppliance',
           name: 'homeAppliance',
+          meta: {
+            title: "家电",
+            isTab: true,
+          },
           component: () => import('../views/HomeViewChild/HomeApplianceView.vue')
         },
         {
           path: 'notebook',
           name: 'notebook',
+          meta: {
+            title: "笔记本",
+            isTab: true,
+          },
           component: () => import('../views/HomeViewChild/NotebookView.vue')
         },
       ],
@@ -51,28 +72,58 @@ const router = createRouter({
     {
       path: '/channel',
       name: 'channel',
+      meta: {
+        title: "分类",
+        isTab: true,
+      },
       component: ChannelView
     },
     {
       path: '/miCircle',
       name: 'miCircle',
+      meta: {
+        title: "社区",
+        isTab: true,
+      },
       component: MiCircleView
     },
     {
       path: '/cart',
       name: 'cart',
+      meta: {
+        title: "购物车",
+        isTab: true,
+      },
       component: CartView
     },
     {
       path: '/user',
       name: 'user',
+      meta: {
+        title: "我的",
+        isTab: true,
+      },
       component: UserView
     },
     // 搜索
     {
       path: '/search',
       name: 'search',
+      meta: {
+        title: "搜索",
+        isTab: false,
+      },
       component: SearchView
+    },
+    // 搜索结果详情页
+    {
+      path: '/searchPage/:value',
+      name: 'searchPage',
+      meta: {
+        title: "搜索结果详情页",
+        isTab: false,
+      },
+      component: SearchPageView
     },
   ]
 })

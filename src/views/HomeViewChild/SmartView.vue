@@ -1,4 +1,9 @@
 <template>
+    <!-- 预加载图 -->
+    <div class="loading" v-show="!(bannerList.length > 0 || undefined)">
+        <img src="../../assets/navLoading.gif" />
+    </div>
+
     <div class="smart">
         <div class="banner" v-if="bannerList.length > 0">
             <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#82A99F">
@@ -112,6 +117,23 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+// 加载图
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 100px;
+    box-sizing: border-box;
+    background-color: white;
+    z-index: 1000;
+
+    img {
+        width: 100%;
+    }
+}
+
 .smart {
     .banner {
         border-radius: 15px;

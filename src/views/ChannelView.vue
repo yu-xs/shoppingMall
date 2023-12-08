@@ -1,4 +1,9 @@
 <template>
+    <!-- 预加载图 -->
+    <div class="loading" v-show="!(sideBarList.length > 0)">
+        <img src="../assets/loading.gif" />
+    </div>
+    
     <div class="channel">
         <div class="search">
             <van-search shape="round" background="#82A99F" placeholder="请输入搜索关键词" />
@@ -171,6 +176,23 @@ onMounted(() => {
 <style lang="scss" scoped>
 ::-webkit-scrollbar {
     display: none;
+}
+
+// 加载图
+.loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 100px;
+    box-sizing: border-box;
+    background-color: white;
+    z-index: 1000;
+
+    img{
+        width: 100%;
+    }
 }
 
 .channel {

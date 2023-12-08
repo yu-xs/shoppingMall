@@ -1,7 +1,13 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, watch, onMounted } from 'vue';
+import {useRoute} from 'vue-router'
+let route = useRoute();
 
 let isActive = ref(0);
+
+const state = reactive({
+  isShowTab: true, //默认展示底部的tab
+});
 
 const navList = reactive([
   { name: '首页', path: 'home', picUrl: '../public/images/icon-home.png' },
@@ -16,10 +22,17 @@ function activeIndex(i) {
   console.log(isActive, i);
 }
 
+// 监听路由中的信息是否为tab页，如果为tab页，展示，否则，不展示底部tab
+watch(
+  () => route.meta,
+  (val) => {
+    state.isShowTab = val.isTab;
+  }
+);
 </script>
 
 <template>
-  <div class="nav">
+  <div class="nav" v-if="state.isShowTab">
     <RouterLink v-for="(i, index) in navList" :key="index" :to="{ name: `${i.path}` }" @click="activeIndex(index)">
       <img :src="`${i.picUrl}`" />
       <span :class="{ active: index == isActive }">{{ i.name }}</span>
