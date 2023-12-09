@@ -6,7 +6,7 @@
 
         <p class="title">{{ dataList[1].body.category_name }}</p>
         <ul class="gridList">
-            <li v-for="i in dataList[2].body.items">
+            <li v-for="i in dataList[2].body.items" @click="goPageView(i.action.path, i.action.type)">
                 <img :src="`${i.img_url}`" />
                 <p class="title">{{ i.product_name }}</p>
             </li>
@@ -14,7 +14,7 @@
 
         <p class="title">{{ dataList[3].body.category_name }}</p>
         <ul class="gridList">
-            <li v-for="i in dataList[4].body.items">
+            <li v-for="i in dataList[4].body.items" @click="goPageView(i.action.path, i.action.type)">
                 <img :src="`${i.img_url}`" />
                 <p class="title">{{ i.product_name }}</p>
             </li>
@@ -22,7 +22,7 @@
 
         <p class="title">{{ dataList[5].body.category_name }}</p>
         <ul class="gridList">
-            <li v-for="i in dataList[6].body.items">
+            <li v-for="i in dataList[6].body.items" @click="goPageView(i.action.path, i.action.type)">
                 <img :src="`${i.img_url}`" />
                 <p class="title">{{ i.product_name }}</p>
             </li>
@@ -32,6 +32,9 @@
 
 <script setup>
 import { ref, inject, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+let $route = useRoute();
+let $router = useRouter();
 
 let dataList = ref([]);
 
@@ -44,6 +47,14 @@ async function getDataList() {
 
     dataList.value = data.data.data[0].category_list;
     console.log(dataList.value);
+}
+
+// 点击商品跳转相关详情页
+function goPageView(id, type) {
+    console.log(id, type);
+    if (type === 'cate') {
+        $router.push({ name: 'cate', params: { cateId: id } })
+    }
 }
 
 onMounted(() => {

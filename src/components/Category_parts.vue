@@ -2,7 +2,7 @@
     <div class="recommend" v-if="dataList.length > 0">
         <p class="title">{{ dataList[0].body.category_name }}</p>
         <ul class="gridList" v-if="dataList.length > 0">
-            <li v-for="i in dataList[1].body.items">
+            <li v-for="i in dataList[1].body.items" :key="i.action.path" @click="goPageView(i.action.path, i.action.type)">
                 <img :src="`${i.img_url}`" />
                 <p class="title">{{ i.product_name }}</p>
             </li>
@@ -26,6 +26,9 @@
 
 <script setup>
 import { ref, reactive, inject, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+let $route = useRoute();
+let $router = useRouter();
 
 let dataList = ref([]);
 
@@ -38,6 +41,14 @@ async function getDataList() {
 
     dataList.value = data.data.data[0].category_list;
     console.log(dataList.value);
+}
+
+// 点击商品跳转相关详情页
+function goPageView(id, type) {
+    console.log(id, type);
+    if (type === 'cate') {
+        $router.push({ name: 'cate', params: { cateId: id } })
+    }
 }
 
 onMounted(() => {

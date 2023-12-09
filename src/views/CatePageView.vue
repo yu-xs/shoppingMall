@@ -1,7 +1,7 @@
 <template>
-    <div class="searchPage">
+    <div class="catePage">
         <!-- 预加载图 -->
-        <div class="loading" v-show="!(resList.length > 0)">
+        <div class="loading" v-show="!(cateList.length > 0)">
             <img src="../assets/navLoading1.gif" />
         </div>
 
@@ -48,6 +48,34 @@
                 </div>
             </li>
         </ul>
+
+        <!-- cate列表 -->
+        <ul class="resList" v-if="cateList.length > 0">
+            <li v-for="i in cateList" :key="i.product_id">
+                <div class="left">
+                    <img :src="`${i.puzzle_url}`" />
+                </div>
+                <div class="right">
+                    <p class="title">{{ i.name }}</p>
+                    <p class="description">{{ i.product_desc }}</p>
+                    <div class="msg">
+                        <ul class="top">
+                            <li v-for=" item in i.class_parameters">
+                                <p></p>
+                                <span></span>
+                            </li>
+                        </ul>
+                        <div class="bottom">
+                            <p class="price">￥<b>{{ i.price }}</b> 起 <span>￥{{ i.market_price }}</span></p>
+                            <p class="assess">
+                                <span v-if="i.comments_total">{{ assessCount(i.comments_total) }}条评价</span>
+                                <span v-if="i.satisfy_per">{{ i.satisfy_per }}满意</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -59,13 +87,27 @@ let $router = useRouter();
 
 let resList = ref([]);
 let searchResList = ref([]);
-let searchVal = ref($route.params.value);
+let searchVal = ref('');
+// 商品id
+let cateId = ref($route.params.cateId);
+let cateList = ref([]);
+
 // 获取input元素
 const inputRef = ref(null);
 // 搜索词列表展示状态
 let showSearchRes = ref(false);
 
 const axios = inject("$axios");
+
+
+// 商品id数据列表
+async function getCateList() {
+    const data = await axios.post(`/api/v1/product/all_product?cat_id=${cateId.value}`);
+
+    cateList.value = data.data.data.product;
+    console.log(cateId.value);
+    console.log(cateList.value);
+}
 
 // 搜索结果列表
 async function getResList() {
@@ -135,7 +177,8 @@ watch(searchVal, (newVal) => {
 
 onMounted(() => {
     // searchVal.value = $route.params.value;
-    getResList();
+    // getResList();
+    getCateList();
 });
 </script>
 
@@ -156,7 +199,7 @@ onMounted(() => {
     }
 }
 
-.searchPage {
+.catePage {
     background-color: #f8faff;
     height: 100%;
 
@@ -246,6 +289,7 @@ onMounted(() => {
         img {
             width: 100%;
             vertical-align: bottom;
+            margin: 10px 0;
         }
     }
 

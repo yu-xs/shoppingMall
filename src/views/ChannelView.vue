@@ -3,10 +3,10 @@
     <div class="loading" v-show="!(sideBarList.length > 0)">
         <img src="../assets/loading.gif" />
     </div>
-    
+
     <div class="channel">
         <div class="search">
-            <van-search shape="round" background="#82A99F" placeholder="请输入搜索关键词" />
+            <van-search shape="round" background="#82A99F" placeholder="请输入搜索关键词" :to="{ name: 'search' }" />
         </div>
         <div style="height: 54px;"></div>
 

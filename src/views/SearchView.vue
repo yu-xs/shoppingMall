@@ -85,7 +85,7 @@ onMounted(() => {
         position: relative;
         padding: 10px 0;
         box-sizing: border-box;
-        background-color: #82a99f;
+        background-color: #c5e6dd;
         display: flex;
         align-items: center;
     }
@@ -102,7 +102,7 @@ onMounted(() => {
         padding-left: 10px;
         box-sizing: border-box;
         outline: none;
-        border: #82a99f;
+        border: none;
         border-radius: 10px;
         font-size: 14px;
     }
@@ -126,7 +126,7 @@ onMounted(() => {
         border-radius: 999px;
         background-color: #c5e6dd;
         font-size: 14px;
-        color: #333;
+        color: #777;
     }
 
     // 搜索词列表

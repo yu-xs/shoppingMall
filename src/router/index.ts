@@ -6,6 +6,7 @@ import CartView from '../views/CartView.vue'
 import UserView from '../views/UserView.vue'
 import SearchView from '../views/SearchView.vue'
 import SearchPageView from '../views/SearchPageView.vue'
+import CatePageView from '../views/CatePageView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -124,6 +125,16 @@ const router = createRouter({
         isTab: false,
       },
       component: SearchPageView
+    },
+    // 分类cate详情页
+    {
+      path: '/cate/:cateId',
+      name: 'cate',
+      meta: {
+        title: "分类cate详情页",
+        isTab: false,
+      },
+      component: CatePageView
     },
   ]
 })
