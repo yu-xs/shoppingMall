@@ -108,7 +108,7 @@ onMounted(() => {
 
 .buyerShow {
     padding-top: 46px;
-    background-color: #e2faf4;
+    background-color: #f4fcfa;
     // padding: 0 10px;
     box-sizing: border-box;
 

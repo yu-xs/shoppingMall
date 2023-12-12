@@ -361,7 +361,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .details {
-  background-color: #e2faf4;
+  background-color: #f4fcfa;
 }
 
 .loading {
