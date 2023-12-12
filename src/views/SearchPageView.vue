@@ -2,7 +2,7 @@
     <div class="searchPage">
         <!-- 预加载图 -->
         <div class="loading" v-show="!(resList.length > 0)">
-            <img src="../assets/navLoading1.gif" />
+            <img src="../assets/navLoading1.gif" />``
         </div>
 
         <!-- 回到顶部 -->
@@ -23,7 +23,7 @@
 
         <!-- 搜索结果列表 -->
         <ul class="resList" v-if="resList.length > 0">
-            <li v-for="i in resList" :key="i.body.product_id" v-show="i.body.image">
+            <li v-for="i in resList" :key="i.body.product_id" v-show="i.body.image" @click="goDetails(i.body.product_id)">
                 <div class="left">
                     <img :src="`${i.body.image}`" />
                 </div>
@@ -88,9 +88,21 @@ function setSearchResList(value) {
     searchVal.value = value;
     // 点击后取消搜索结果展示
     showSearchRes.value = false;
+    // 跳转
+    $router.replace({ name: 'searchPage', params: { value: value } });
     getResList();
-
 }
+
+// 跳转详情页goDetails
+function goDetails(id) {
+    $router.push({
+        name: 'details',
+        params: {
+            id: id
+        }
+    })
+}
+
 // 判断input焦点状态
 function inputFocus() {
     if (inputRef.value == document.activeElement) {

@@ -1,6 +1,6 @@
 <template>
     <!-- 预加载图 -->
-    <div class="loading" v-show="!(bannerList.length > 0)">
+    <div class="loading" v-show="bannerList.length < 0">
         <img src="../../assets/navLoading.gif" />
     </div>
 
@@ -31,7 +31,7 @@
 
         <!-- 商品列表 -->
         <ul class="goods" v-if="goodsList.length > 0">
-            <li v-for="i in goodsList" :key="i.product_id">
+            <li v-for="i in goodsList" :key="i.product_id" @click="goDetails(i.product_id)">
                 <img :src="`${i.img_url}`" />
                 <div class="msg">
                     <p class="title">{{ i.product_name }}</p>
@@ -53,7 +53,7 @@
         <div class="notebook" v-if="notebookPlaybill.length > 0">
             <img :src="`${notebookPlaybill[0].img_url}`" />
             <ul class="goods" v-if="notebookList.length > 0">
-                <li v-for="i in notebookList" :key="i.product_id">
+                <li v-for="i in notebookList" :key="i.product_id" @click="goDetails(i.product_id)">
                     <img :src="`${i.img_url}`" />
                     <div class="msg">
                         <p class="title">{{ i.product_name }}</p>
@@ -89,6 +89,10 @@
 
 <script setup>
 import { ref, inject, onMounted } from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+let $route = useRoute();
+let $router = useRouter();
+
 let bannerList = ref([]);
 let categoryList = ref([]);
 let bigImgList = ref([]);
@@ -99,7 +103,6 @@ let notebookList = ref([]);
 let homeAppliancePlaybill = ref([]);
 let smartList = ref([]);
 let upgradePlaybill = ref([]);
-
 
 const axios = inject("$axios");
 
@@ -137,6 +140,16 @@ async function getDataList() {
 
     console.log(data.data.data.data);
 
+}
+
+// 跳转详情页goDetails
+function goDetails(id) {
+    $router.push({
+        name: 'details',
+        params: {
+            id: id
+        }
+    })
 }
 
 onMounted(() => {
@@ -276,7 +289,7 @@ onMounted(() => {
 
         .price {
             font-size: 13px;
-            color: red;
+            color: #ff4d53;
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -387,7 +400,7 @@ onMounted(() => {
 
         .price {
             font-size: 13px;
-            color: red;
+            color: #ff4d53;
             font-weight: bold;
             margin-bottom: 5px;
         }

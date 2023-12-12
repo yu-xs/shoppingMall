@@ -1,6 +1,6 @@
 <template>
     <!-- 预加载图 -->
-    <div class="loading" v-show="!(bannerList.length > 0 || undefined)">
+    <div class="loading" v-show="bannerList.length < 0">
         <img src="../../assets/navLoading.gif" />
     </div>
 

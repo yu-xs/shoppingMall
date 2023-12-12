@@ -106,6 +106,31 @@ const router = createRouter({
       },
       component: UserView
     },
+    {
+      path: '/login',
+      name: 'login',
+      meta: {
+        title: "登录页",
+        isTab: false,
+      },
+      component: () => import('../views/LoginView.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      meta: {
+        title: "注册页",
+        isTab: false,
+      },
+      component: () => import('../views/RegisterView.vue')
+    },
+    // 详情页
+    {
+      path: '/details/:id',
+      name: 'details',
+      component: () => import('../views/DetailsView.vue')
+
+    },
     // 搜索
     {
       path: '/search',
@@ -135,6 +160,16 @@ const router = createRouter({
         isTab: false,
       },
       component: CatePageView
+    },
+    // 买家秀详情页
+    {
+      path: '/buyerShow/:id',
+      name: 'buyerShow',
+      meta: {
+        title: "买家秀详情页",
+        isTab: false,
+      },
+      component: () => import('../views/buyerShowPageView.vue')
     },
   ]
 })

@@ -51,7 +51,7 @@
 
         <!-- cate列表 -->
         <ul class="resList" v-if="cateList.length > 0">
-            <li v-for="i in cateList" :key="i.product_id">
+            <li v-for="i in cateList" :key="i.product_id" @click="goPageView(i.product_id)">
                 <div class="left">
                     <img :src="`${i.puzzle_url}`" />
                 </div>
@@ -166,6 +166,20 @@ function assessCount(count) {
     }
     else {
         return count;
+    }
+}
+
+// 点击商品跳转相关详情页
+function goPageView(id, type) {
+    console.log(id, type);
+    if (type === 'cate') {
+        $router.push({ name: 'cate', params: { cateId: id } })
+    }
+    else if (type === 'keyword') {
+        $router.push({ name: 'searchPage', params: { value: id } });
+    }
+    else {
+        $router.push({ name: 'details', params: { id: id } })
     }
 }
 

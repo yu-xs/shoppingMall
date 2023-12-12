@@ -70,6 +70,12 @@ function goPageView(id, type) {
     if (type === 'cate') {
         $router.push({ name: 'cate', params: { cateId: id } })
     }
+    else if (type === 'keyword') {
+        $router.push({ name: 'searchPage', params: { value: id } });
+    }
+    else {
+        $router.push({ name: 'details', params: { id: id } })
+    }
 }
 
 onMounted(() => {

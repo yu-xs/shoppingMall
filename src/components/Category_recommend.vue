@@ -50,6 +50,12 @@ function goPageView(id, type) {
     if (type === 'cate') {
         $router.push({ name: 'cate', params: { cateId: id } })
     }
+    else if (type === 'keyword') {
+        $router.push({ name: 'searchPage', params: { value: id } });
+    }
+    else {
+        $router.push({ name: 'details', params: { id: id } })
+    }
 }
 
 onMounted(() => {
@@ -112,10 +118,12 @@ onMounted(() => {
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .right .price b{
+
+        .right .price b {
             font-weight: bold;
         }
-        .right .label{
+
+        .right .label {
             font-size: 10px;
             vertical-align: 3px;
             margin-left: 10px;

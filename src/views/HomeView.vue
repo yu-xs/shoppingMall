@@ -1,10 +1,17 @@
 <script setup>
 import navComponents from '../components/bottom-navBar/navComponents.vue'
 import { inject, onMounted, reactive, ref } from "vue";
+import { useRoute, useRouter } from 'vue-router'
+let $route = useRoute();
+let $router = useRouter();
 
 const axios = inject("$axios");
 
 let childArr = ref(['recommend', 'smart', 'radio', 'homeAppliance', 'notebook']);
+
+// 顶部导航栏高亮
+let topNavActive = ref(0);
+
 let navBarList = ref([]);
 
 async function getNavBar() {
@@ -15,6 +22,17 @@ async function getNavBar() {
   console.log(navBarList.value);
 }
 
+function goUserView() {
+  $router.replace({ name: 'user' })
+}
+
+// 切换顶部导航栏
+function switchNavView({ name }) {
+  // $router.replace({ name: `${childArr[name]}` })
+
+  topNavActive.value = name;
+  console.log(name);
+}
 
 onMounted(() => {
   getNavBar();
@@ -33,20 +51,21 @@ onMounted(() => {
     <!-- 搜索栏 -->
     <div class="search">
       <div class="logo">
-        <img src="../../public/images/logo.png" />
+        <img src="../assets/home-logo.png" />
       </div>
       <div class="searchInp">
         <van-search shape="round" background="transparent" placeholder="请输入搜索关键词" :to="{ name: 'search' }" />
       </div>
-      <div class="user">
+      <div class="user" @click="goUserView">
         <img src="../../public/images/icon-user.png" />
       </div>
     </div>
 
     <!-- 顶部导航栏 -->
-    <van-tabs background="#82A99F" color="#60627D" title-active-color="#60627D" animated sticky>
+    <van-tabs v-model:active="topNavActive" background="#82A99F" color="#60627D" title-active-color="#60627D" animated
+      sticky @click-tab="switchNavView">
       <keep-alive>
-        <van-tab v-for="(i, index) in navBarList " :title="i.name" :to="{ name: `${childArr[index]}` }">
+        <van-tab v-for="(i, index) in navBarList " :title="i.name" :name="index" :to="{ name: `${childArr[index]}` }">
           <router-view />
         </van-tab>
       </keep-alive>
