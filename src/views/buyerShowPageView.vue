@@ -108,7 +108,7 @@ onMounted(() => {
 
 .buyerShow {
     padding-top: 46px;
-    background-color: #f4fcfa;
+    background-color: rgb(250, 250, 250);
     // padding: 0 10px;
     box-sizing: border-box;
 
@@ -206,7 +206,9 @@ onMounted(() => {
         }
 
         li .imgBox>li {
+            margin: 0;
             flex: 0 1 30%;
+            margin-top: 5px;
             margin-right: 5px;
         }
 

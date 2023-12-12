@@ -13,13 +13,16 @@
     </van-swipe>
 
     <div class="mid">
-      <div><span>{{ '¥' + jiage }}</span><span>{{ '¥' + yqjg }}</span></div>
+      <div class="midd">
+        <div><span style="font-size: 23px;color: rgb(255, 89, 0);font-weight: 600;">{{ '¥' + jiage }}</span><span
+            v-if="yqjg > jiage" class="yqjg">{{ '¥' + yqjg }}</span></div>
 
-      <div>{{ name }}</div>
+        <div class="spmz">{{ name }}</div>
 
-      <div v-for="(i, index) in cptx" :key="i"><span class="quan">{{ index + 1 }}</span>{{ i }}</div>
+        <div class="texing" v-for="(i, index) in cptx" :key="i">{{ i }}</div>
+      </div>
 
-      <div class="pz">
+      <div class="pz" v-if="iconurl.length > 0">
         <div class="pzdh" v-for="i in iconurl" :key="i">
           <img class="icon" :src="i.icon">
 
@@ -28,23 +31,28 @@
 
         </div>
       </div>
+
     </div>
 
     <div class="mid-2">
 
       <div class="yx">
         <div class="one" @click="xz">
-          <div>已选</div>
-          <div>{{ qc }}</div><van-icon name="arrow" />
+          <div style="color: gray;">已选</div>
+          <div>{{ qc + 'X' + sl }}</div><van-icon name="arrow" />
         </div>
         <div class="two" @click="xz">
           <div class="xzys">
+
             <div v-for="(i, inde) in kxys" :key="i">
-              <img class="ysfl" :src="j.img_url" v-for="(j, index) in kxysurl" :key="j" v-show="index == inde">
+              <img class="ysfl" v-if="num > 1" :src="j.img_url" v-for="(j, index) in kxysurl" :key="j"
+                v-show="index == inde">
+
 
             </div>
-            <div style="width: 61.5px; height: 41.49px; line-height: 22.49px;text-align: center;font-size: 14px;">{{
-              `共${num}颜色可选` }}</div>
+            <div style=" width: 62.5px;text-align: center;
+  background-color: #F8F8F8; padding: 8px; font-size: 11px; box-sizing: border-box;
+  line-height:11.5px;border-radius: 4px;height: 41.5px; color: gray;" v-if="num > 1">{{ `共${num}种颜色可选` }}</div>
           </div>
 
         </div>
@@ -87,25 +95,30 @@
       <div class="zstp">
         <div class="zsimg"><img :src="zsdtp"></div>
         <div>
-          <div>{{ '¥' + jiage }} <span>{{ '¥' + yqjg }}</span></div>
-          <div>{{ qc }}</div>
+          <div class="xzjg">{{ '¥' + jiage }}
+            <span class="yqjg" v-if="yqjg > jiage">{{ '¥' + yqjg }}</span>
+          </div>
+          <div class="qc">{{ qc }}</div>
         </div>
       </div>
 
-      <div>
+      <div class="tcc">
         <div>{{ banben }}</div>
-        <div style="display: flex;justify-content: space-around;">
+        <div style="display: flex;justify-content: start; flex-wrap: wrap; margin-bottom: 20px;">
           <div :class="{ active: index === currentIndex }" class="bbhz" v-for="(i, index) in qbbb" :key="i"
             @click="pt(index, i.name)">{{ i.name }}</div>
         </div>
 
         <div>{{ ys }}</div>
-        <div style="display: flex;justify-content: space-around;">
+        <div style="display: flex;justify-content: flex-start;flex-wrap: wrap;">
           <div :class="{ active: index === currentIndex2 }" class="yshz" v-for="(i, index) in color" :key="i"
             @click="pt2(index, i.name)">{{ i.name }}</div>
         </div>
-
+        <div class="gmsl">购买数量 <div><van-icon name="minus" @click="jian" /><span class="shuliang">{{ sl }}</span><van-icon
+              name="plus" @click="jia" /></div>
+        </div>
       </div>
+
 
     </van-popup>
 
@@ -124,7 +137,44 @@
         </li>
       </ul>
     </div>
+
+    <!-- 为你推荐 -->
+    <div class="recommend" v-if="recommendList.length > 0">
+      <p>为你推荐</p>
+      <ul class="recommendList">
+        <li v-for="i in recommendList" :key="i.pid">
+          <img :src="i.imgUrl" />
+          <div class="msg">
+            <p class="title">{{ i.name }}</p>
+            <span class="price">￥{{ i.price }} <del v-if="!(i.marketPrice === i.price)">￥{{ i.marketPrice }}</del></span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 海报轮播图 -->
+    <van-swipe class="playbill-swipe" :autoplay="3000" indicator-color="white">
+      <van-swipe-item v-for="i in playBillList">
+        <img style="height: 100%;" :src="i.imgUrl" />
+      </van-swipe-item>
+    </van-swipe>
+
+    <!-- 商品信息 -->
+    <van-tabs v-model:active="productsActive" sticky class="products" v-if="goodsDatas.length > 0">
+      <!-- 预加载图 -->
+      <div class="loading" v-show="!(goodsDatas[productsActive].materialViewList.length > 0)">
+        <img src="../assets/loading03.gif" />
+      </div>
+
+      <van-tab v-for="i in goodsDatas" :title="i.tabName">
+        <img style="width: 100%;vertical-align: bottom;" v-for="i in goodsDatas[productsActive].materialViewList"
+          :src="i.materialList[0].imageUrl" />
+      </van-tab>
+    </van-tabs>
   </div>
+
+  <!-- 返回顶部按钮 -->
+  <van-back-top right="5vw" bottom="12vh" />
 </template>
 
 
@@ -191,6 +241,19 @@ let yqjg = ref(null)
 
 let zsdtp = ref(null)
 
+let sl = ref(1)
+
+
+let jia = () => {
+  sl.value++
+}
+let jian = () => {
+
+
+  if (sl.value >= 2) {
+    sl.value--
+  }
+}
 
 const showt = ref(false);
 const fieldValue = ref('');
@@ -199,6 +262,7 @@ const options = useCascaderAreaData();
 const onFinish = ({ selectedOptions }) => {
   showt.value = false;
   fieldValue.value = selectedOptions.map((option) => option.text).join('/');
+  console.log(fieldValue.value)
 };
 
 
@@ -227,7 +291,7 @@ let pt = (index, i) => {
   currentIndex.value = index
   mrbb = i
   qc.value = name.value + ' ' + mrbb + ' ' + mrys
-
+  sl.value = 1
   pd()
 
 
@@ -238,10 +302,15 @@ let pt2 = (index, i) => {
   currentIndex2.value = index
   mrys = i
   qc.value = name.value + ' ' + mrbb + ' ' + mrys
-
+  sl.value = 1
 
   pd()
 }
+
+
+
+
+
 
 const data = () => {
   axios.get(`https://apis.netstart.cn/xmsc/miproduct/view?commodity_id=${id.value}`)
@@ -271,17 +340,32 @@ const data = () => {
 
 
 
+      if (color.value.length == 1) { mrys = '' } else { mrys = color.value[0].name }
+      if (qbbb.value.length == 1) { mrbb = '' } else { mrbb = qbbb.value[0].name }
 
-      mrbb = qbbb.value[0].name
-      mrys = color.value[0].name
+
+
+      //  else{  }
+
+
+      console.log(color.value.length)
 
       qc.value = name.value + ' ' + mrbb + ' ' + mrys
 
       console.log(qc.value)
       kxys.value = response.data.data.buy_option[1].list
 
-      num.value = kxys.value = response.data.data.buy_option[1].list.length
+      // num.value=kxys.value=.list.length
 
+
+      for (let sumys in response.data.data.buy_option) {
+
+        if (response.data.data.buy_option[sumys].name == '颜色') {
+          num.value = response.data.data.buy_option[sumys].list.length
+
+
+        }
+      }
 
       kxysurl.value = response.data.data.goods_info
 
@@ -323,7 +407,6 @@ const data = () => {
 
       }
 
-
       for (let i in img.value) {
 
         lbturl.value.push(img.value[i].img_url)
@@ -331,7 +414,6 @@ const data = () => {
         dqjg.value = img.value[0].price
         yj.value = img.value[0].market_price
       }
-
     })
     .catch(error => {
       console.log('没请到');
@@ -339,15 +421,31 @@ const data = () => {
     })
 }
 
+
 // 获取买家秀数据
 let buyerShowData = ref([]);
+let playBillList = ref([]);
+let goodsDatas = ref([]);
+let productsActive = ref(0);
 async function getBuyerShowData() {
   console.log('请求数据')
   const data = await axios.post(`/api/mtop/xiaomishop/product/info`, [{}, { productId: id.value }], { headers: { 'Content-Type': 'application/json' } });
 
   buyerShowData.value = data.data.data.buyerShow;
-  console.log(buyerShowData.value);
+  playBillList.value = data.data.data.carouselAdInfo.carouselAdList;
+  // 商品信息获取
+  goodsDatas.value = data.data.data.realProduct.realProductInfo[id.value].materialTabList;
+  console.log(goodsDatas.value);
 }
+// 获取推荐列表数据
+let recommendList = ref([]);
+async function getRecommendData() {
+  const data = await axios.post(`/api/mtop/xiaomishop/product/compose`, [{}, { productId: id.value }], { headers: { 'Content-Type': 'application/json' } });
+
+  recommendList.value = data.data.data.recommend.recommendList;
+  console.log(recommendList.value);
+}
+
 // 跳转买家秀详情页
 async function buyerShowPageView() {
   $router.push({ name: 'buyerShow', params: { id: id.value } })
@@ -356,10 +454,27 @@ async function buyerShowPageView() {
 onMounted(() => {
   data()
   getBuyerShowData();
+  getRecommendData();
 })
 </script>
 
 <style scoped lang="scss">
+// 轮播图样式
+.playbill-swipe {
+  height: 105px;
+  margin: 0 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.playbill-swipe .van-swipe-item {
+  color: #fff;
+  font-size: 20px;
+  line-height: 150px;
+  text-align: center;
+  background-color: #39a9ed;
+}
+
 .details {
   background-color: #f4fcfa;
 }
@@ -380,12 +495,90 @@ onMounted(() => {
   }
 }
 
+
+
+.midd {
+
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.xzjg {
+  margin-top: 20px;
+  margin-left: 20px;
+  color: rgb(255, 89, 0);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.qc {
+  color: rgb(0, 0, 0);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  margin-top: 8.5px;
+  margin-left: 20px;
+}
+
+
+
+.texing {
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  height: 21px;
+  line-height: 21px;
+  opacity: 0.9;
+}
+
+.spmz {
+  -webkit-line-clamp: 2;
+  color: rgb(0, 0, 0);
+  font-size: 17px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.tcc {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 12px;
+}
+
+.gmsl {
+  display: flex;
+  justify-content: space-between;
+}
+
+.shuliang {
+  display: inline-block;
+  background-color: rgb(249, 249, 249);
+  border-radius: 4px;
+  height: 29px;
+  width: 49px;
+  text-align: center;
+  line-height: 29px;
+}
+
+.yqjg {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+  font-weight: 400;
+  margin-left: 12px;
+  margin-top: 10.5px;
+  text-decoration-line: line-through;
+}
+
 .tyou {
-  margin-left: 120px;
+  margin-left: 136px;
+  color: black;
 }
 
 .xmfw {
-  margin-left: 25px;
+  margin-left: 16px;
 }
 
 .xmzy {
@@ -393,7 +586,11 @@ onMounted(() => {
 }
 
 .two {
+  width: 216px;
+  margin-left: 55px;
+  overflow: auto;
   margin-bottom: 10px;
+  // background-color: palevioletred;
 }
 
 .ps {
@@ -405,18 +602,19 @@ onMounted(() => {
   margin-bottom: 20px;
 
   .psdn {
-    margin-left: 25px;
+    margin-left: 16px;
   }
 
   .xzdq {
     border: none;
     text-align: center;
     caret-color: rgba(0, 0, 0, 0);
-    padding-left: 40px;
+    padding: 0 26px;
   }
 
   .you {
     margin-left: 80px;
+    color: black;
   }
 }
 
@@ -427,8 +625,8 @@ onMounted(() => {
 
 .custom-indicator {
   position: absolute;
-  right: 5px;
-  bottom: 5px;
+  right: 10px;
+  bottom: 10px;
   padding: 2px 5px;
   font-size: 12px;
   background-color: rgba(51, 51, 51, 0.3);
@@ -439,14 +637,15 @@ onMounted(() => {
 
 .mid {
   // background-color: red;
-
+  background-color: #f4fcfa;
   overflow: hidden;
   padding: 10px;
 }
 
 .pz {
+
   border-radius: 5px;
-  width: 354.35px;
+  // width: 100vw;
   margin-top: 10px;
   display: flex;
 
@@ -457,7 +656,7 @@ onMounted(() => {
 
   text-overflow: ellipsis;
 
-
+  padding-top: 10px;
 }
 
 .pz::-webkit-scrollbar {
@@ -470,8 +669,9 @@ onMounted(() => {
 
 .qt {
   font-size: 12px;
-  padding-left: 64px;
+  padding-left: 54px;
   margin-top: 5px;
+  color: #808080;
 }
 
 .pzdh {
@@ -493,24 +693,32 @@ onMounted(() => {
   text-overflow: ellipsis;
   font-size: 11px;
   width: 70px;
+  color: gray;
 }
 
 
 .yx {
 
-  width: 354.35px;
-  height: 236.42px;
+  // width: 354.35px;
+  // height: 200px;
+  padding-top: 10px;
   background-color: #FFFFFF;
   border-radius: 5px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+
+  padding-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .mid-2 {
   padding: 0px 10px;
-  background-color: #F5F5F5;
+  background-color: #f4fcfa;
+  // background-color: teal;
+  // margin-top: 10px;
 }
 
 .one {
+
   display: flex;
   justify-content: space-around;
   font-size: 12px;
@@ -521,7 +729,7 @@ onMounted(() => {
 .three {
   display: flex;
   justify-content: space-around;
-
+  color: gray;
 
 }
 
@@ -529,16 +737,17 @@ onMounted(() => {
   display: flex;
   // justify-content: space-around;
   font-size: 12px;
-
+  color: grey;
 
 }
 
 .ysfl {
-  width: 50px;
+  width: 40px;
 }
 
 .xzys {
   display: flex;
+  // margin-left: 50px;
 }
 
 .gou {
@@ -548,7 +757,7 @@ onMounted(() => {
 .zstp {
   width: 355px;
   height: 120px;
-  background-color: yellow;
+  // background-color: yellow;
   margin: 10px;
   display: flex;
 }
@@ -556,28 +765,33 @@ onMounted(() => {
 .zsimg {
   width: 86.5px;
   height: 86.5px;
-  background-color: red;
+  background-color: #EDEDED;
+  border-radius: 8px;
 
   img {
     width: 100%;
   }
 }
 
-.quan {
-  display: inline-block;
-  border-radius: 50%;
-  // background-color: red;
-  width: 12px;
-  font-size: 12px;
-  text-align: center;
-  border: 1px solid gray;
-}
+// .quan{
+//   display: inline-block;
+//   border-radius: 50%;
+//   // background-color: red;
+//   // width: 11px;
+//   // height: 18px;
+
+//   font-size: 12px;
+//   text-align: center;
+//   border: 1px solid gray;
+// }
 
 .bbhz {
   background-color: #F5F5F5;
   font-size: 12px;
   border-radius: 10px;
   padding: 10px 10px;
+  margin-top: 10px;
+  margin-right: 23px;
 }
 
 .yshz {
@@ -585,6 +799,10 @@ onMounted(() => {
   font-size: 12px;
   border-radius: 10px;
   padding: 6px 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .active {
@@ -653,5 +871,70 @@ onMounted(() => {
       border-radius: 5px;
     }
   }
+
+}
+
+// 为你推荐样式
+.details .recommend {
+  margin: 0 10px;
+  margin-top: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.details .recommend p {
+  font-size: 15px;
+}
+
+.details .recommend .recommendList {
+  display: flex;
+  // margin: 5px 0;
+  overflow: auto;
+}
+
+.details .recommend li {
+  margin-top: 5px;
+  margin-right: 10px;
+  padding: 8px 5px;
+  box-sizing: border-box;
+  background-color: rgb(250, 250, 250);
+  border-radius: 5px;
+}
+
+.details .recommend li img {
+  width: 95px;
+  height: 95px;
+  border-radius: 5px;
+  vertical-align: bottom;
+  margin-bottom: 5px;
+}
+
+.details .recommend li .msg {
+  .title {
+    width: 95px;
+    font-size: 13px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .price {
+    font-size: 15px;
+    font-weight: bold;
+
+    del {
+      font-weight: lighter;
+      font-size: 12px;
+      color: #ccc;
+      text-decoration: line-through;
+    }
+  }
+}
+
+.details .products {
+  margin-top: 10px;
 }
 </style>
