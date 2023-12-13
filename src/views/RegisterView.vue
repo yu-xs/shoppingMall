@@ -6,8 +6,10 @@
         </div>
 
         <div class="inputBox">
-            <input type="number" v-model="state.userName" placeholder="请输入账号" />
-            <input type="password" v-model="state.userPsd" placeholder="请输入密码" />
+            <input type="number" v-model.trim="state.userName" placeholder="手机号码/账号ID" />
+            <div v-if="state.userName && !isPhoneNumberValid" class="error"><van-icon name="warning-o" /> 手机号码格式不正确</div>
+            <input type="password" v-model.trim="state.userPsd" placeholder="请输入密码" />
+            <div v-if="state.userPsd && !isPasswordValid" class="error"><van-icon name="warning-o" /> 密码长度必须大于等于10</div>
 
             <div class="protocol">
                 <van-checkbox v-model="state.checked">
@@ -17,7 +19,7 @@
         </div>
 
         <div class="bottomBox">
-            <button :style="showBtn">注册</button>
+            <button :style="showBtn" :disabled="!isFormValid" @click="goRegister">注册</button>
             <div class="login-method">
                 <span @click="goLoginView">手机号登录</span>
             </div>
@@ -37,11 +39,37 @@ let state = reactive({
 })
 
 function goLoginView() {
-    $router.push({ name: 'login' });
+    $router.replace({ name: 'login' });
 }
 
+import { Toast } from 'vant';
+import { showToast } from 'vant';
+// 点击注册
+function goRegister() {
+    const user = {
+        nickname: state.userName,
+        username: state.userName,
+        password: state.userPsd,
+        userImg: 'https://m.mi.com/static/img/avatar.76a75b8f17.png',
+        addressList: [],
+    };
+    // 将账号信息保存在LocalStorage中
+    localStorage.setItem('user', JSON.stringify(user));
+    showToast('注册成功!');
+    $router.replace({ name: 'login' });
+}
+
+const isPhoneNumberValid = computed(() => {
+    const phoneNumberRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+    return state.userName && phoneNumberRegex.test(state.userName)
+})
+
+const isPasswordValid = computed(() => {
+    return state.userPsd && state.userPsd.length >= 10
+})
+
 const showBtn = computed(() => {
-    if (state.checked === true && state.userName && state.userPsd) {
+    if (state.checked === true && isPhoneNumberValid.value && isPasswordValid.value) {
         console.log('条件满足');
         return 'opacity: 1'
     }
@@ -50,6 +78,9 @@ const showBtn = computed(() => {
         return 'opacity: 0.5'
     }
 })
+const isFormValid = computed(() => {
+    return state.checked && isPhoneNumberValid.value && isPasswordValid.value;
+});
 
 
 </script>
@@ -108,6 +139,16 @@ const showBtn = computed(() => {
         .protocol a {
             text-decoration: underline;
             color: #698FCB;
+        }
+
+        .error {
+            width: 100%;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 10px;
+            padding-left: 40px;
+            box-sizing: border-box;
+            color: red;
         }
     }
 

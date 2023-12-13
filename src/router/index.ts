@@ -8,6 +8,8 @@ import SearchView from '../views/SearchView.vue'
 import SearchPageView from '../views/SearchPageView.vue'
 import CatePageView from '../views/CatePageView.vue'
 
+import { checkAuth } from '../untils/auth.js';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -95,7 +97,14 @@ const router = createRouter({
         title: "购物车",
         isTab: true,
       },
-      component: CartView
+      component: CartView,
+      beforeEnter: (to: any, from: any, next: any): any => {
+        if (checkAuth()) {
+          next(); // 已登录，继续访问
+        } else {
+          next('/login'); // 未登录，跳转到登录页
+        }
+      }
     },
     {
       path: '/user',
@@ -104,7 +113,14 @@ const router = createRouter({
         title: "我的",
         isTab: true,
       },
-      component: UserView
+      component: UserView,
+      beforeEnter: (to: any, from: any, next: any): any => {
+        if (checkAuth()) {
+          next(); // 已登录，继续访问
+        } else {
+          next('/login'); // 未登录，跳转到登录页
+        }
+      }
     },
     {
       path: '/login',
@@ -170,6 +186,46 @@ const router = createRouter({
         isTab: false,
       },
       component: () => import('../views/buyerShowPageView.vue')
+    },
+    // 个人信息页
+    {
+      path: '/userInfo/:userName/:userImg',
+      name: 'userInfo',
+      meta: {
+        title: "个人信息页",
+        isTab: false,
+      },
+      component: () => import('../views/UserInfoView.vue')
+    },
+    // 收货地址页
+    {
+      path: '/shipAddress',
+      name: 'shipAddress',
+      meta: {
+        title: "收货地址页",
+        isTab: false,
+      },
+      component: () => import('../views/ShipaddressView.vue')
+    },
+    // 修改收货地址页
+    {
+      path: '/editAddress',
+      name: 'editAddress',
+      meta: {
+        title: "修改收货地址页",
+        isTab: false,
+      },
+      component: () => import('../views/EditAddressView.vue')
+    },
+    // 新增收货地址页
+    {
+      path: '/newAddress',
+      name: 'newAddress',
+      meta: {
+        title: "新增收货地址页",
+        isTab: false,
+      },
+      component: () => import('../views/NewAddressView.vue')
     },
   ]
 })

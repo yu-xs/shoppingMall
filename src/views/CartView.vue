@@ -6,10 +6,6 @@
         </template>
     </van-cell>
     <div class="bg">
-        <van-cell-group inset>
-            <van-cell title-style="font-size:16px;color:rgba(0, 0, 0, 0.9);" title="登录后享受更多优惠" is-link :to="{ name: 'login' }"
-                value="去登录" />
-        </van-cell-group>
 
         <div><img class="xr"
                 src="https://cdn.cnbj1.fds.api.mi-img.com/mishop-m/production/trade_center/res/images/common/no_result_mi_cart.png">

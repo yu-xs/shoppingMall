@@ -6,8 +6,10 @@
         </div>
 
         <div class="inputBox">
-            <input type="number" v-model="state.userName" placeholder="手机号码/账号ID" />
-            <input type="password" v-model="state.userPsd" placeholder="请输入密码" />
+            <input type="number" v-model.trim="state.userName" placeholder="手机号码/账号ID" />
+            <div v-if="state.userName && !isPhoneNumberValid" class="error"><van-icon name="warning-o" /> 手机号码格式不正确</div>
+            <input type="password" v-model.trim="state.userPsd" placeholder="请输入密码" />
+            <div v-if="state.userPsd && !isPasswordValid" class="error"><van-icon name="warning-o" /> 密码长度必须大于等于10</div>
 
             <div class="protocol">
                 <van-checkbox v-model="state.checked">
@@ -17,7 +19,7 @@
         </div>
 
         <div class="bottomBox">
-            <button :style="showBtn">登录</button>
+            <button :style="showBtn" :disabled="!isFormValid" @click="goLogin">登录</button>
             <div class="login-method">
                 <span @click="goRegisterView">立即注册 | </span>
                 <span>忘记密码?</span>
@@ -40,8 +42,17 @@ let state = reactive({
     userPsd: ''
 })
 
+const isPhoneNumberValid = computed(() => {
+    const phoneNumberRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+    return state.userName && phoneNumberRegex.test(state.userName)
+})
+
+const isPasswordValid = computed(() => {
+    return state.userPsd && state.userPsd.length >= 10
+})
+
 const showBtn = computed(() => {
-    if (state.checked === true && state.userName && state.userPsd) {
+    if (state.checked === true && isPhoneNumberValid.value && isPasswordValid.value) {
         console.log('条件满足');
         return 'opacity: 1'
     }
@@ -50,9 +61,63 @@ const showBtn = computed(() => {
         return 'opacity: 0.5'
     }
 })
+const isFormValid = computed(() => {
+    return state.checked && isPhoneNumberValid.value && isPasswordValid.value;
+});
+
+import { Toast } from 'vant';
+import { showToast } from 'vant';
+// 点击登录
+function goLogin() {
+    // 获取LocalStorage中的账号信息
+    const storedUser = localStorage.getItem('user');
+    // 判断账号信息是否存在
+    if (storedUser) {
+        // 账号信息存在，进行登录验证
+        const user = JSON.parse(storedUser);
+
+        // 获取用户输入的用户名和密码
+        const username = state.userName;
+        const password = state.userPsd;
+
+        // 进行账号验证
+        if (username === user.username && password === user.password) {
+            const token = generateToken();
+            console.log(token);
+            // 将token保存在LocalStorage中
+            localStorage.setItem('token', token);
+
+            showToast('登录成功!');
+            // 跳转至我的页面
+            $router.replace({ name: 'user' });
+        } else {
+            showToast('账号或密码错误!');
+            console.log('账号或密码错误!');
+        }
+    } else {
+        showToast('账号不存在!');
+        console.log('账号不存在!');
+    }
+}
+
+// 登录生成token
+function generateToken() {
+    // 生成UUID
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0;
+        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+
+    // 将UUID转换为token
+    const token = btoa(uuid);
+
+    return token;
+}
 
 function goRegisterView() {
-    $router.push({ name: 'register' });
+    showToast('跳转注册页');
+    $router.replace({ name: 'register' });
 }
 </script>
 
@@ -110,6 +175,16 @@ function goRegisterView() {
         .protocol a {
             text-decoration: underline;
             color: #698FCB;
+        }
+
+        .error {
+            width: 100%;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 10px;
+            padding-left: 40px;
+            box-sizing: border-box;
+            color: red;
         }
     }
 

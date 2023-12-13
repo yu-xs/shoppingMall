@@ -131,13 +131,13 @@ onMounted(() => {
             padding: 5px 10px;
             box-sizing: border-box;
             // 渐变背景颜色
-            background: linear-gradient(to bottom right, #ffffff, #4bffd2);
+            background: linear-gradient(to bottom right, #ffffff, rgb(255, 226, 188));
             margin: 0 5px;
             border-radius: 999px;
         }
 
         li.active {
-            background: linear-gradient(to bottom right, #78f4ff, #ffffff);
+            background: linear-gradient(to bottom right, rgb(255, 145, 0), #ffffff);
         }
     }
 
@@ -148,6 +148,10 @@ onMounted(() => {
 
         li {
             margin: 10px 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+            background-color: white;
+            border-radius: 10px;
         }
 
         li .top {
@@ -179,7 +183,7 @@ onMounted(() => {
         }
 
         li .content {
-            width: 95vw;
+            width: 90vw;
             font-size: 15px;
             color: #333;
             line-height: 1.2;
@@ -207,8 +211,9 @@ onMounted(() => {
 
         li .imgBox>li {
             margin: 0;
+            padding: 0;
             flex: 0 1 30%;
-            margin-top: 5px;
+            margin-bottom: 5px;
             margin-right: 5px;
         }
 

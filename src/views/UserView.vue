@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="hd">
-      <div class="user" @click="goLogin">
-        <div class="headImage"><img class="tx" src="https://m.mi.com/static/img/avatar.76a75b8f17.png"></div>
-        <div class="login">登录/注册</div>
+      <div class="user" @click="userInfo">
+        <div class="headImage"><img class="tx" :src="`${userImg}`"></div>
+        <div class="login">{{ userName }}</div>
+        <van-icon name="arrow" />
       </div>
     </div>
     <van-cell title="我的订单" is-link value="全部订单" />
@@ -67,8 +68,9 @@
 
 
 <script setup>
-// import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
 let $route = useRoute();
 let $router = useRouter();
 
@@ -76,19 +78,27 @@ function goLogin() {
   $router.push({ name: 'login' });
 }
 
+let userName = ref('');
+let userImg = ref('');
+
+// 获取LocalStorage的信息
+onMounted(function () {
+  const userInfo = localStorage.getItem('user');
+  userName.value = JSON.parse(userInfo).nickname;
+  userImg.value = JSON.parse(userInfo).userImg;
+});
+
+// 跳转个人信息页
+function userInfo() {
+  $router.push({
+    name: 'userInfo',
+    params: {
+      userName: userName.value,
+      userImg: userImg.value
+    }
+  });
+}
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <style scoped>
 .hd {
@@ -107,30 +117,37 @@ function goLogin() {
   height: 50px;
   /* background-color: yellow; */
   display: flex;
-
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
 
 .headImage {
   width: 50px;
   height: 50px;
   /* background-color: blueviolet; */
-  margin-left: 15px;
 }
 
 .login {
-  width: 54px;
+  flex: 1;
   height: 50px;
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
   text-align: left;
   line-height: 50px;
   margin-left: 10px;
+}
 
+.user i {
+  color: white;
 }
 
 .tx {
   width: 100%;
   height: 100%;
+  vertical-align: bottom;
+  border-radius: 50%;
 }
 
 .line {

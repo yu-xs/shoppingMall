@@ -142,7 +142,7 @@
     <div class="recommend" v-if="recommendList.length > 0">
       <p>为你推荐</p>
       <ul class="recommendList">
-        <li v-for="i in recommendList" :key="i.pid">
+        <li v-for="i in recommendList" :key="i.pid" @click="setPageView(i.pid)">
           <img :src="i.imgUrl" />
           <div class="msg">
             <p class="title">{{ i.name }}</p>
@@ -153,7 +153,7 @@
     </div>
 
     <!-- 海报轮播图 -->
-    <van-swipe class="playbill-swipe" :autoplay="3000" indicator-color="white">
+    <van-swipe class="playbill-swipe" :autoplay="3000" indicator-color="white" v-if="playBillList">
       <van-swipe-item v-for="i in playBillList">
         <img style="height: 100%;" :src="i.imgUrl" />
       </van-swipe-item>
@@ -432,7 +432,7 @@ async function getBuyerShowData() {
   const data = await axios.post(`/api/mtop/xiaomishop/product/info`, [{}, { productId: id.value }], { headers: { 'Content-Type': 'application/json' } });
 
   buyerShowData.value = data.data.data.buyerShow;
-  playBillList.value = data.data.data.carouselAdInfo.carouselAdList;
+  playBillList.value = data.data.data.carouselAdInfo?.carouselAdList;
   // 商品信息获取
   goodsDatas.value = data.data.data.realProduct.realProductInfo[id.value].materialTabList;
   console.log(goodsDatas.value);
@@ -450,6 +450,20 @@ async function getRecommendData() {
 async function buyerShowPageView() {
   $router.push({ name: 'buyerShow', params: { id: id.value } })
 }
+
+// 推荐更新详情页数据
+function setPageView(newId) {
+  id.value = newId;
+  // 滚动页面回顶部
+  window.scrollTo({
+    top: 0,
+  });
+  data()
+  getBuyerShowData();
+  getRecommendData();
+}
+
+// 监听商品id的值
 
 onMounted(() => {
   data()
@@ -903,6 +917,10 @@ onMounted(() => {
   border-radius: 5px;
 }
 
+.details .recommend li:last-child {
+  margin-right: 0;
+}
+
 .details .recommend li img {
   width: 95px;
   height: 95px;
@@ -936,5 +954,21 @@ onMounted(() => {
 
 .details .products {
   margin-top: 10px;
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 100px;
+    box-sizing: border-box;
+    background-color: white;
+    z-index: 1000;
+
+    img {
+      width: 100%;
+    }
+  }
 }
 </style>
