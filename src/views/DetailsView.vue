@@ -1,97 +1,15 @@
 <template>
   <!-- 预加载图 -->
-  <div class="loading" v-show="!(lbturl.length > 0)">
-    <img src="../assets/navLoading1.gif" />
+  <div v-if="bcz">该商品已下架</div>
+  <div v-if="bcz == false">
+    <div class="loading" v-if="!(lbturl.length > 0)">
+      <img src="../assets/navLoading1.gif" />
+    </div>
   </div>
 
-  <div class="details">
-    <van-swipe>
-      <van-swipe-item v-for="(i, index) in lbturl" :key="index"><img :src="i" class="lbttp"></van-swipe-item>
-      <template #indicator="{ active, total }">
-        <div class="custom-indicator">{{ active + 1 }}/{{ total }}</div>
-      </template>
-    </van-swipe>
+  <div class="details" v-if="bcz == false">
 
-    <div class="mid">
-      <div class="midd">
-        <div><span style="font-size: 23px;color: rgb(255, 89, 0);font-weight: 600;">{{ '¥' + jiage }}</span><span
-            v-if="yqjg > jiage" class="yqjg">{{ '¥' + yqjg }}</span></div>
-
-        <div class="spmz">{{ name }}</div>
-
-        <div class="texing" v-for="(i, index) in cptx" :key="i">{{ i }}</div>
-      </div>
-
-      <div class="pz" v-if="iconurl.length > 0">
-        <div class="pzdh" v-for="i in iconurl" :key="i">
-          <img class="icon" :src="i.icon">
-
-          <div class="top-title">{{ i.top_title }}</div>
-          <div class="bottom-title">{{ i.bottom_title }}</div>
-
-        </div>
-      </div>
-
-    </div>
-
-    <div class="mid-2">
-
-      <div class="yx">
-        <div class="one" @click="xz">
-          <div style="color: gray;">已选</div>
-          <div>{{ qc + 'X' + sl }}</div><van-icon name="arrow" />
-        </div>
-        <div class="two" @click="xz">
-          <div class="xzys">
-
-            <div v-for="(i, inde) in kxys" :key="i">
-              <img class="ysfl" v-if="num > 1" :src="j.img_url" v-for="(j, index) in kxysurl" :key="j"
-                v-show="index == inde">
-
-
-            </div>
-            <div style=" width: 62.5px;text-align: center;
-  background-color: #F8F8F8; padding: 8px; font-size: 11px; box-sizing: border-box;
-  line-height:11.5px;border-radius: 4px;height: 41.5px; color: gray;" v-if="num > 1">{{ `共${num}种颜色可选` }}</div>
-          </div>
-
-        </div>
-
-
-
-        <div class="three">
-          <div class="ps" @click="showt = true">
-            <div class="psdn">配送 </div>
-            <input class="xzdq" type="text" v-model="fieldValue" placeholder="请选择地区">
-            <van-icon class="you" name="arrow" />
-          </div>
-
-
-          <van-popup v-model:show="showt" round position="bottom">
-            <van-cascader v-model="cascaderValue" title="请选择所在地区" :options="options" @close="showt = false"
-              @finish="onFinish" />
-          </van-popup>
-
-
-        </div>
-
-        <div class="four">
-          <div class="xmfw">服务</div>
-          <div class="xmzy" v-for="(i, index) in fw" :key="index" v-show="index < 2"><img class="gou"
-              src="https://cdn.cnbj1.fds.api.mi-img.com/mishop-m/production/trade_center/res/images/mishop/product/service_icon.png">{{
-                i.title }}</div><van-icon class="tyou" name="arrow" />
-        </div>
-        <div class="qt" v-for="(i, index) in fw" :key="index" v-show="index == 2"><img class="gou"
-            src="https://cdn.cnbj1.fds.api.mi-img.com/mishop-m/production/trade_center/res/images/mishop/product/service_icon.png">{{
-              i.title }}</div>
-
-
-      </div>
-    </div>
-
-
-
-    <van-popup v-model:show="show" round position="bottom" :style="{ height: '70%' }">
+    <van-popup v-model:show="show" closeable round position="bottom" :style="{ height: '70%' }">
       <div class="zstp">
         <div class="zsimg"><img :src="zsdtp"></div>
         <div>
@@ -118,60 +36,218 @@
               name="plus" @click="jia" /></div>
         </div>
       </div>
+      <van-action-bar>
 
+        <van-action-bar-button type="warning" text="加入购物车" />
+        <van-action-bar-button type="danger" text="立即购买" />
+      </van-action-bar>
 
     </van-popup>
 
-    <!-- 买家秀 -->
-    <div class="buyerShow" @click="buyerShowPageView" v-if="buyerShowData">
-      <div class="top">
-        <span>买家秀</span>
-        <span>共{{ buyerShowData.total }}条评论<van-icon name="arrow" /></span>
-      </div>
-      <ul class="labels">
-        <li v-for="i in buyerShowData.tags">{{ i }}</li>
-      </ul>
-      <ul class="showImg">
-        <li v-for="i in buyerShowData.imgs">
-          <img :src="i" />
-        </li>
-      </ul>
-    </div>
+    <van-action-bar class="Buysp">
+      <van-action-bar-icon icon="shop-o" text="首页" :to="{ name: 'recommend' }" />
+      <van-action-bar-icon icon="chat-o" text="客服" />
+      <van-action-bar-icon icon="cart-o" text="购物车" :to="{ name: 'cart' }" />
+      <van-action-bar-button type="warning" text="加入购物车" @click="Downbuy" />
+      <van-action-bar-button type="danger" text="立即购买" @click="Downbuy" />
+    </van-action-bar>
 
-    <!-- 为你推荐 -->
-    <div class="recommend" v-if="recommendList.length > 0">
-      <p>为你推荐</p>
-      <ul class="recommendList">
-        <li v-for="i in recommendList" :key="i.pid" @click="setPageView(i.pid)">
-          <img :src="i.imgUrl" />
-          <div class="msg">
-            <p class="title">{{ i.name }}</p>
-            <span class="price">￥{{ i.price }} <del v-if="!(i.marketPrice === i.price)">￥{{ i.marketPrice }}</del></span>
+
+    <van-popup v-model:show="show3" closeable round position="bottom" :style="{ height: '70%' }">
+      <div class="zstp">
+        <div class="zsimg"><img :src="zsdtp"></div>
+        <div>
+          <div class="xzjg">{{ '¥' + jiage }}
+            <span class="yqjg" v-if="yqjg > jiage">{{ '¥' + yqjg }}</span>
           </div>
-        </li>
-      </ul>
-    </div>
-
-    <!-- 海报轮播图 -->
-    <van-swipe class="playbill-swipe" :autoplay="3000" indicator-color="white" v-if="playBillList">
-      <van-swipe-item v-for="i in playBillList">
-        <img style="height: 100%;" :src="i.imgUrl" />
-      </van-swipe-item>
-    </van-swipe>
-
-    <!-- 商品信息 -->
-    <van-tabs v-model:active="productsActive" sticky class="products" v-if="goodsDatas.length > 0">
-      <!-- 预加载图 -->
-      <div class="loading" v-show="!(goodsDatas[productsActive].materialViewList.length > 0)">
-        <img src="../assets/loading03.gif" />
+          <div class="qc">{{ qc }}</div>
+        </div>
       </div>
 
-      <van-tab v-for="i in goodsDatas" :title="i.tabName">
-        <img style="width: 100%;vertical-align: bottom;" v-for="i in goodsDatas[productsActive].materialViewList"
-          :src="i.materialList[0].imageUrl" />
+      <div class="tcc">
+        <div>{{ banben }}</div>
+        <div style="display: flex;justify-content: start; flex-wrap: wrap; margin-bottom: 20px;">
+          <div :class="{ active: index === currentIndex }" class="bbhz" v-for="(i, index) in qbbb" :key="i"
+            @click="pt(index, i.name)">{{ i.name }}</div>
+        </div>
+
+        <div>{{ ys }}</div>
+        <div style="display: flex;justify-content: flex-start;flex-wrap: wrap;">
+          <div :class="{ active: index === currentIndex2 }" class="yshz" v-for="(i, index) in color" :key="i"
+            @click="pt2(index, i.name)">{{ i.name }}</div>
+        </div>
+        <div class="gmsl">购买数量 <div><van-icon name="minus" @click="jian" /><span class="shuliang">{{ sl }}</span><van-icon
+              name="plus" @click="jia" /></div>
+        </div>
+      </div>
+      <van-action-bar>
+        <van-action-bar-button type="danger" text="确定" />
+      </van-action-bar>
+
+    </van-popup>
+
+
+    <van-tabs v-model:active="active" scrollspy sticky>
+      <van-tab v-for="index in 1">
+        <template #title> <van-icon name="arrow-left" @click="syy" /> </template>
+
+      </van-tab>
+      <van-tab title="商品">
+        <div>
+          <van-swipe>
+            <van-swipe-item v-for="(i, index) in lbturl" :key="index"><img :src="i" class="lbttp"></van-swipe-item>
+            <template #indicator="{ active, total }">
+              <div class="custom-indicator">{{ active + 1 }}/{{ total }}</div>
+            </template>
+          </van-swipe>
+
+          <div class="mid" ref="element">
+            <div class="midd">
+              <div><span style="font-size: 23px;color: rgb(255, 89, 0);font-weight: 600;">{{ '¥' + jiage }}</span><span
+                  v-if="yqjg > jiage" class="yqjg">{{ '¥' + yqjg }}</span></div>
+
+              <div class="spmz">{{ name }}</div>
+
+              <div class="texing" v-for="(i, index) in cptx" :key="i">{{ i }}</div>
+            </div>
+
+            <div class="pz" v-if="iconurl.length > 0">
+              <div class="pzdh" v-for="i in iconurl" :key="i">
+                <img class="icon" :src="i.icon">
+
+                <div class="top-title">{{ i.top_title }}</div>
+                <div class="bottom-title">{{ i.bottom_title }}</div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mid-2">
+
+            <div class="yx">
+              <div class="one" @click="xz">
+                <div style="color: gray;">已选</div>
+                <div>{{ qc + 'X' + sl }}</div><van-icon name="arrow" />
+              </div>
+              <div class="two" @click="xz">
+                <div class="xzys">
+                  <div class="qbys">
+                    <div v-for="(i, inde) in kxys" :key="i">
+                      <img class="ysfl" v-if="num > 1" :src="j.img_url" v-for="(j, index) in kxysurl" :key="j"
+                        v-show="index == inde">
+
+                    </div>
+                  </div>
+                  <div style=" width: 62.5px;text-align: center;
+  background-color: #F8F8F8; padding: 8px; font-size: 11px; box-sizing: border-box;
+  line-height:11.5px;border-radius: 4px;height: 41.5px; color: gray;" v-if="num > 1">{{ `共${num}种颜色可选` }}</div>
+                </div>
+
+              </div>
+
+
+
+              <div class="three">
+                <div class="ps" @click="showt = true">
+                  <div>配送 </div>
+                  <input class="xzdq" type="text" v-model="fieldValue" placeholder="请选择地区">
+                  <van-icon c name="arrow" />
+                </div>
+
+
+                <van-popup v-model:show="showt" round position="bottom">
+                  <van-cascader v-model="cascaderValue" title="请选择所在地区" :options="options" @close="showt = false"
+                    @finish="onFinish" />
+                </van-popup>
+
+
+              </div>
+
+              <div class="four">
+                <div>服务</div>
+                <div class="fwtwo">
+                  <div class="xmzy" v-for="(i, index) in fw" :key="index" v-show="index < 2"><img class="gou"
+                      src="https://cdn.cnbj1.fds.api.mi-img.com/mishop-m/production/trade_center/res/images/mishop/product/service_icon.png">{{
+                        i.title }}</div>
+                </div><van-icon name="arrow" />
+              </div>
+              <div class="qt" v-for="(i, index) in fw" :key="index" v-show="index == 2"><img class="gou"
+                  src="https://cdn.cnbj1.fds.api.mi-img.com/mishop-m/production/trade_center/res/images/mishop/product/service_icon.png">{{
+                    i.title }}</div>
+
+
+            </div>
+          </div>
+        </div>
+      </van-tab>
+      <van-tab title="评价">
+        <div class="buyerShow" @click="buyerShowPageView" v-if="buyerShowData">
+          <div class="top">
+            <span>买家秀</span>
+            <span>共{{ buyerShowData.total }}条评论<van-icon name="arrow" /></span>
+          </div>
+          <ul class="labels">
+            <li v-for="i in buyerShowData.tags">{{ i }}</li>
+          </ul>
+          <ul class="showImg">
+            <li v-for="i in buyerShowData.imgs">
+              <img :src="i" />
+            </li>
+          </ul>
+        </div>
+      </van-tab>
+
+
+      <!-- 为你推荐 -->
+      <div class="recommend" v-if="recommendList.length > 0">
+        <p>为你推荐</p>
+        <ul class="recommendList">
+          <li v-for="i in recommendList" :key="i.pid">
+            <img :src="i.imgUrl" />
+            <div class="msg">
+              <p class="title">{{ i.name }}</p>
+              <span class="price">￥{{ i.price }} <del v-if="!(i.marketPrice === i.price)">￥{{ i.marketPrice
+              }}</del></span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 海报轮播图 -->
+      <van-swipe class="playbill-swipe" :autoplay="3000" indicator-color="white" v-if="playBillList.length > 0">
+        <van-swipe-item v-for="i in playBillList">
+          <img style="height: 100%;" :src="i.imgUrl" />
+        </van-swipe-item>
+      </van-swipe>
+
+
+      <van-tab title="详情">
+        <!-- 商品信息 -->
+        <van-tabs v-model:active="productsActive" sticky class="products" v-if="goodsDatas.length > 0">
+          <!-- 预加载图 -->
+          <div class="loading" v-show="!(goodsDatas[productsActive].materialViewList.length > 0)">
+            <img src="../assets/loading03.gif" />
+          </div>
+
+          <van-tab v-for="i in goodsDatas" :title="i.tabName">
+            <img style="width: 100%;vertical-align: bottom;" v-for="i in goodsDatas[productsActive].materialViewList"
+              :src="i.materialList[0].imageUrl" />
+          </van-tab>
+        </van-tabs>
       </van-tab>
     </van-tabs>
+
+
+
+
+
   </div>
+
+
+
+
+
 
   <!-- 返回顶部按钮 -->
   <van-back-top right="5vw" bottom="12vh" />
@@ -179,20 +255,28 @@
 
 
 <script setup >
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { useCascaderAreaData } from '@vant/area-data';
-import { Cascader } from 'vant';
+
+
+const element = ref(null);
+const distance = ref(0);
 
 let $route = useRoute();
 let $router = useRouter();
 
+let Downbuy = () => {
+  show3.value = true
+}
 
 let id = ref($route.params.id)
 let lbturl = ref([])
 let img = ref(null)
 
+
+let active = ref(1)
 let dqjg = ref(null)
 
 let yj = ref(null)
@@ -205,11 +289,19 @@ let show = ref(false)
 
 let icon = ref(null)
 
+let fh = ref(true)
+
 let iconurl = ref([])
 
 let kxys = ref(null)
 
 let kxysurl = ref(null)
+
+let show3 = ref(false)
+
+let syy = () => {
+  $router.go(-1)
+}
 
 let num = ref(null)
 
@@ -243,6 +335,8 @@ let zsdtp = ref(null)
 
 let sl = ref(1)
 
+let bcz = ref(false)
+
 
 let jia = () => {
   sl.value++
@@ -264,7 +358,6 @@ const onFinish = ({ selectedOptions }) => {
   fieldValue.value = selectedOptions.map((option) => option.text).join('/');
   console.log(fieldValue.value)
 };
-
 
 
 
@@ -339,9 +432,11 @@ const data = () => {
       icon.value = response.data.data.goods_info[0].class_parameters.list
 
 
+      if (color.value.length == 1 && color.value[0].name == '通用') { mrys = '' }
+      else if (color.value.length >= 1) { mrys = color.value[0].name }
 
-      if (color.value.length == 1) { mrys = '' } else { mrys = color.value[0].name }
-      if (qbbb.value.length == 1) { mrbb = '' } else { mrbb = qbbb.value[0].name }
+
+      if (qbbb.value.length >= 1) { mrbb = qbbb.value[0].name }
 
 
 
@@ -352,11 +447,12 @@ const data = () => {
 
       qc.value = name.value + ' ' + mrbb + ' ' + mrys
 
-      console.log(qc.value)
-      kxys.value = response.data.data.buy_option[1].list
+      for (let yanse in response.data.data.buy_option) {
+        if (response.data.data.buy_option[yanse].name == '颜色') {
+          kxys.value = response.data.data.buy_option[yanse].list
 
-      // num.value=kxys.value=.list.length
-
+        }
+      }
 
       for (let sumys in response.data.data.buy_option) {
 
@@ -417,7 +513,7 @@ const data = () => {
     })
     .catch(error => {
       console.log('没请到');
-
+      bcz.value = true
     })
 }
 
@@ -432,7 +528,7 @@ async function getBuyerShowData() {
   const data = await axios.post(`/api/mtop/xiaomishop/product/info`, [{}, { productId: id.value }], { headers: { 'Content-Type': 'application/json' } });
 
   buyerShowData.value = data.data.data.buyerShow;
-  playBillList.value = data.data.data.carouselAdInfo?.carouselAdList;
+  playBillList.value = data.data.data.carouselAdInfo.carouselAdList;
   // 商品信息获取
   goodsDatas.value = data.data.data.realProduct.realProductInfo[id.value].materialTabList;
   console.log(goodsDatas.value);
@@ -451,24 +547,11 @@ async function buyerShowPageView() {
   $router.push({ name: 'buyerShow', params: { id: id.value } })
 }
 
-// 推荐更新详情页数据
-function setPageView(newId) {
-  id.value = newId;
-  // 滚动页面回顶部
-  window.scrollTo({
-    top: 0,
-  });
-  data()
-  getBuyerShowData();
-  getRecommendData();
-}
-
-// 监听商品id的值
-
 onMounted(() => {
   data()
   getBuyerShowData();
   getRecommendData();
+
 })
 </script>
 
@@ -491,7 +574,11 @@ onMounted(() => {
 
 .details {
   background-color: #f4fcfa;
+  padding-bottom: 50px;
+  box-sizing: border-box;
 }
+
+
 
 .loading {
   position: absolute;
@@ -509,7 +596,20 @@ onMounted(() => {
   }
 }
 
+.Buysp {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+}
 
+.back {
+  width: 27px;
+  position: fixed;
+  top: 1.5%;
+  left: 2%;
+  z-index: 666;
+}
 
 .midd {
 
@@ -536,7 +636,16 @@ onMounted(() => {
   margin-left: 20px;
 }
 
+.qbys {
+  display: flex;
+  width: 160px;
+  overflow: auto;
+}
 
+.fwtwo {
+  display: flex;
+  margin-left: -140px;
+}
 
 .texing {
   color: rgb(0, 0, 0);
@@ -600,9 +709,9 @@ onMounted(() => {
 }
 
 .two {
-  width: 216px;
+  // width: 216px;   
   margin-left: 55px;
-  overflow: auto;
+  overflow: hidden;
   margin-bottom: 10px;
   // background-color: palevioletred;
 }
@@ -612,8 +721,11 @@ onMounted(() => {
   font-size: 12px;
   display: flex;
   text-align: center;
-
+  justify-content: space-between;
   margin-bottom: 20px;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
 
   .psdn {
     margin-left: 16px;
@@ -623,7 +735,7 @@ onMounted(() => {
     border: none;
     text-align: center;
     caret-color: rgba(0, 0, 0, 0);
-    padding: 0 26px;
+    // padding: 0 26px;
   }
 
   .you {
@@ -635,6 +747,7 @@ onMounted(() => {
 .lbttp {
   width: 100vw;
   vertical-align: bottom;
+
 }
 
 .custom-indicator {
@@ -727,31 +840,39 @@ onMounted(() => {
 .mid-2 {
   padding: 0px 10px;
   background-color: #f4fcfa;
-  // background-color: teal;
-  // margin-top: 10px;
+
 }
 
 .one {
-
+  width: 100%;
   display: flex;
-  justify-content: space-around;
+  //  background-color: yellow;
+  justify-content: space-between;
   font-size: 12px;
   margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
 
 }
 
 .three {
   display: flex;
-  justify-content: space-around;
+  width: 100%;
   color: gray;
+  // background-color: tomato;
 
 }
 
 .four {
+  width: 100%;
   display: flex;
-  // justify-content: space-around;
+  justify-content: space-between;
   font-size: 12px;
   color: grey;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
 
 }
 
@@ -761,7 +882,6 @@ onMounted(() => {
 
 .xzys {
   display: flex;
-  // margin-left: 50px;
 }
 
 .gou {
@@ -917,10 +1037,6 @@ onMounted(() => {
   border-radius: 5px;
 }
 
-.details .recommend li:last-child {
-  margin-right: 0;
-}
-
 .details .recommend li img {
   width: 95px;
   height: 95px;
@@ -954,21 +1070,5 @@ onMounted(() => {
 
 .details .products {
   margin-top: 10px;
-
-  .loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    padding-top: 100px;
-    box-sizing: border-box;
-    background-color: white;
-    z-index: 1000;
-
-    img {
-      width: 100%;
-    }
-  }
 }
 </style>

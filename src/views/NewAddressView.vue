@@ -10,8 +10,9 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 const $route = useRoute();
+const $router = useRouter();
 import { showToast } from 'vant';
 
 import { areaList } from '@vant/area-data';
@@ -21,15 +22,17 @@ const onSave = (info) => {
     // 将地址信息存储到LocalStorage中
     const userInfo = JSON.parse(localStorage.getItem('user'));
     const addressList = userInfo.addressList;
+    addressList.push(info);
     // 为每个地址对象添加一个唯一的id属性
     addressList.forEach((address, index) => {
         address.id = index + 1;
     });
-    addressList.push(info);
     localStorage.setItem('user', JSON.stringify(userInfo));
 
     showToast('保存成功');
     console.log(info);
+    // 跳转回收货地址页
+    $router.replace({ name: 'shipAddress' });
 }
 const onDelete = () => showToast('delete');
 

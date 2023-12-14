@@ -227,6 +227,16 @@ const router = createRouter({
       },
       component: () => import('../views/NewAddressView.vue')
     },
+    // 地图页
+    {
+      path: '/map',
+      name: 'map',
+      meta: {
+        title: "地图页",
+        isTab: false,
+      },
+      component: () => import('../views/MapView.vue')
+    },
   ]
 })
 
