@@ -55,7 +55,7 @@ watch(userName, (newVal) => {
 
 // 点击跳转收货地址
 const goShipAddress = () => {
-    $router.push('/shipAddress');
+    $router.push({name: 'shipAddress'});
 }
 
 // import { Toast } from 'vant';

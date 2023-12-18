@@ -38,8 +38,8 @@
       </div>
       <van-action-bar>
 
-        <van-action-bar-button type="warning" text="加入购物车" />
-        <van-action-bar-button type="danger" text="立即购买" />
+        <van-action-bar-button type="warning" text="加入购物车" @click="tocar" />
+        <van-action-bar-button type="danger" text="立即购买" @click="goPaymentView" />
       </van-action-bar>
 
     </van-popup>
@@ -47,9 +47,9 @@
     <van-action-bar class="Buysp">
       <van-action-bar-icon icon="shop-o" text="首页" :to="{ name: 'recommend' }" />
       <van-action-bar-icon icon="chat-o" text="客服" />
-      <van-action-bar-icon icon="cart-o" text="购物车" :to="{ name: 'cart' }" />
+      <van-action-bar-icon icon="cart-o" text="购物车" :badge="carsl" :to="{ name: 'cart' }" />
       <van-action-bar-button type="warning" text="加入购物车" @click="Downbuy" />
-      <van-action-bar-button type="danger" text="立即购买" @click="Downbuy" />
+      <van-action-bar-button type="danger" text="立即购买" @click="Nowbuy" />
     </van-action-bar>
 
 
@@ -81,10 +81,47 @@
         </div>
       </div>
       <van-action-bar>
-        <van-action-bar-button type="danger" text="确定" />
+        <van-action-bar-button type="danger" text="确定" @click="tocar" />
       </van-action-bar>
 
     </van-popup>
+
+    <van-popup v-model:show="show4" closeable round position="bottom" :style="{ height: '70%' }">
+      <div class="zstp">
+        <div class="zsimg"><img :src="zsdtp"></div>
+        <div>
+          <div class="xzjg">{{ '¥' + jiage }}
+            <span class="yqjg" v-if="yqjg > jiage">{{ '¥' + yqjg }}</span>
+          </div>
+          <div class="qc">{{ qc }}</div>
+        </div>
+      </div>
+
+      <div class="tcc">
+        <div>{{ banben }}</div>
+        <div style="display: flex;justify-content: start; flex-wrap: wrap; margin-bottom: 20px;">
+          <div :class="{ active: index === currentIndex }" class="bbhz" v-for="(i, index) in qbbb" :key="i"
+            @click="pt(index, i.name)">{{ i.name }}</div>
+        </div>
+
+        <div>{{ ys }}</div>
+        <div style="display: flex;justify-content: flex-start;flex-wrap: wrap;">
+          <div :class="{ active: index === currentIndex2 }" class="yshz" v-for="(i, index) in color" :key="i"
+            @click="pt2(index, i.name)">{{ i.name }}</div>
+        </div>
+        <div class="gmsl">购买数量 <div><van-icon name="minus" @click="jian" /><span class="shuliang">{{ sl }}</span><van-icon
+              name="plus" @click="jia" /></div>
+        </div>
+      </div>
+      <van-action-bar>
+        <van-action-bar-button type="danger" text="确定" @click="goPaymentView" />
+      </van-action-bar>
+
+    </van-popup>
+
+
+
+
 
 
     <van-tabs v-model:active="active" scrollspy sticky>
@@ -259,7 +296,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { useCascaderAreaData } from '@vant/area-data';
-
+import { checkAuth } from '../untils/auth.js'
 
 const element = ref(null);
 const distance = ref(0);
@@ -269,12 +306,137 @@ let $router = useRouter();
 
 let Downbuy = () => {
   show3.value = true
+
+
+
+}
+
+
+
+
+
+let tocar = () => {
+
+
+  if (checkAuth()) {
+
+
+
+    let goods = localStorage.goods || "[]";
+
+    goods = JSON.parse(goods);
+
+    let BuyCar = localStorage.BuyCar || "[]";
+
+    BuyCar = JSON.parse(BuyCar);
+
+
+    if (goods.length == []) {
+      goods.unshift({
+        goodsImg: zsdtp.value,
+        goodsName: name.value,
+        goodsTypes: qc.value,
+        goodsPrice: jiage.value,
+        goodsNum: sl.value,
+        goodsZt: false
+      });
+      localStorage.goods = JSON.stringify(goods);
+
+      for (let i in goods) {
+        BuyCar.push(carsl.value += goods[i].goodsNum)
+        carsl.value = BuyCar[0]
+        localStorage.BuyCar = JSON.stringify(BuyCar);
+      }
+
+
+
+    }
+
+
+    // carsl.value+=sl.value
+
+    // 如果大于0
+    else if (goods.length > []) {
+
+
+
+
+      for (let i in goods) {
+        if (qc.value == goods[i].goodsTypes) {
+          console.log(i)
+          goods[i].goodsNum += sl.value
+          localStorage.goods = JSON.stringify(goods);
+        }
+      }
+
+      let valueToCheck = qc.value;
+
+      let exists = goods.some(obj => Object.values(obj).includes(valueToCheck));
+
+      if (exists) {
+        console.log('存在')
+      } else {
+        console.log('不存在')
+        goods.unshift({
+          goodsImg: zsdtp.value,
+          goodsName: name.value,
+          goodsTypes: qc.value,
+          goodsPrice: jiage.value,
+          goodsNum: sl.value,
+          goodsZt: false
+        });
+        localStorage.goods = JSON.stringify(goods);
+      }
+
+      BuyCar.shift()
+      carsl.value = 0
+      BuyCar.push(carsl.value)
+      for (let i in goods) {
+
+        BuyCar[0] += goods[i].goodsNum
+
+        carsl.value = BuyCar[0]
+        localStorage.BuyCar = JSON.stringify(BuyCar);
+      }
+
+
+
+
+    }
+
+
+    show3.value = false
+    show.value = false
+
+
+
+
+
+
+  } else {
+    $router.push({ name: 'login' }) // 未登录，跳转到登录页
+  }
+
+}
+
+let Nowbuy = () => {
+  show4.value = true
+}
+
+let payView = () => {
+  if (checkAuth()) {
+    console.log('去结账') //跳结账页面
+  } else {
+    $router.push({ name: 'login' }) // 未登录，跳转到登录页
+  }
 }
 
 let id = ref($route.params.id)
 let lbturl = ref([])
 let img = ref(null)
 
+let gwc = ref(true)
+let gm = ref(true)
 
 let active = ref(1)
 let dqjg = ref(null)
@@ -287,6 +449,8 @@ let name = ref(null)
 
 let show = ref(false)
 
+let carsl = ref(false)
+
 let icon = ref(null)
 
 let fh = ref(true)
@@ -298,6 +462,7 @@ let kxys = ref(null)
 let kxysurl = ref(null)
 
 let show3 = ref(false)
+let show4 = ref(false)
 
 let syy = () => {
   $router.go(-1)
@@ -518,6 +683,21 @@ const data = () => {
 }
 
 
+// 跳转支付页
+function goPaymentView() {
+  $router.push({
+    name: 'payment',
+    query: {
+      goodsImg: zsdtp.value,
+      name: name.value,
+      goodsInfo: qc.value,
+      price: jiage.value,
+      count: sl.value,
+      totalPrice: Number(jiage.value) * Number(sl.value)
+    }
+  });
+}
+
 // 获取买家秀数据
 let buyerShowData = ref([]);
 let playBillList = ref([]);
@@ -547,10 +727,18 @@ async function buyerShowPageView() {
   $router.push({ name: 'buyerShow', params: { id: id.value } })
 }
 
+
 onMounted(() => {
   data()
   getBuyerShowData();
   getRecommendData();
+
+
+  let BuyCar = localStorage.BuyCar || "[]";
+  if (BuyCar != "[]") {
+    BuyCar = JSON.parse(BuyCar);
+    carsl.value = BuyCar[0]
+  }
 
 })
 </script>
@@ -653,6 +841,7 @@ onMounted(() => {
   height: 21px;
   line-height: 21px;
   opacity: 0.9;
+  overflow: hidden;
 }
 
 .spmz {

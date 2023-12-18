@@ -28,8 +28,11 @@
                 <p class="content">{{ i.comment_content }}</p>
                 <ul class="imgBox" v-if="i.comment_images">
                     <li v-for="i in i.comment_images">
-                        <img :src="i" />
+                        <img :src="i" @click="showImage(i)" />
                     </li>
+                    <div class="mask" v-if="show" @click="hideImage">
+                        <img :src="selectedImage" />
+                    </div>
                 </ul>
                 <div class="bottom">
                     <van-icon name="share-o" />
@@ -51,6 +54,18 @@ let goodsId = ref(route.params.id);
 
 const axios = inject("$axios");
 
+// 点击图片展示
+const show = ref(false);
+const selectedImage = ref('');
+const showImage = (url) => {
+    show.value = true;
+    selectedImage.value = url;
+};
+const hideImage = () => {
+    show.value = false;
+    selectedImage.value = '';
+};
+
 function goBack() {
     router.back();
 }
@@ -60,15 +75,15 @@ let reviewsType = ref([]);
 let reviewsList = ref([]);
 async function getReviewsData() {
     const data = await axios.post(`/api/v1/communicate/mizone_buyer_show_list?commodity_id=${goodsId.value}&page_size=10&need_detail=true`);
-    reviewsType.value = data.data.data.detail.comment_tags;
-    reviewsList.value = data.data.data.comments;
+    reviewsType.value = data.data.data?.detail.comment_tags;
+    reviewsList.value = data.data.data?.comments;
     console.log(reviewsType.value);
 }
 
 let reviewsId = ref('');
 async function getReviewsList() {
     const data = await axios.post(`/api/v1/communicate/mizone_buyer_show_list?commodity_id=${goodsId.value}&page_size=10&profile_id=${reviewsId.value}`);
-    reviewsList.value = data.data.data.comments;
+    reviewsList.value = data.data.data?.comments;
     console.log(reviewsList.value);
 }
 
@@ -207,6 +222,27 @@ onMounted(() => {
             justify-content: flex-start;
             flex-wrap: wrap;
             margin-top: 10px;
+        }
+
+        // 点击图片展示样式
+        li .imgBox {
+            .mask {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 100;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .mask img {
+                max-width: 100%;
+                max-height: 100%;
+            }
         }
 
         li .imgBox>li {

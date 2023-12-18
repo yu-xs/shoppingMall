@@ -10,6 +10,9 @@ import CatePageView from '../views/CatePageView.vue'
 
 import { checkAuth } from '../untils/auth.js';
 
+import { Toast } from 'vant';
+import { showToast } from 'vant';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -236,6 +239,34 @@ const router = createRouter({
         isTab: false,
       },
       component: () => import('../views/MapView.vue')
+    },
+    // 支付页
+    {
+      path: '/payment',
+      name: 'payment',
+      meta: {
+        title: "支付页",
+        isTab: false,
+      },
+      component: () => import('../views/PaymentView.vue'),
+      beforeEnter: (to: any, from: any, next: any): any => {
+        if (checkAuth()) {
+          next(); // 已登录，继续访问
+        } else {
+          showToast('您还未登录, 请先登录!');
+          next('/login'); // 未登录，跳转到登录页
+        }
+      }
+    },
+    // 订单页
+    {
+      path: '/order',
+      name: 'order',
+      meta: {
+        title: "订单页",
+        isTab: false,
+      },
+      component: () => import('../views/MyOrderView.vue')
     },
   ]
 })

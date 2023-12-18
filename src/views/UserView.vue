@@ -7,7 +7,7 @@
         <van-icon name="arrow" />
       </div>
     </div>
-    <van-cell title="我的订单" is-link value="全部订单" />
+    <van-cell title="我的订单" is-link value="全部订单" @click="goOrderView" />
     <van-grid :border="false" :column-num="3" icon-size="24px">
       <van-grid-item icon="pending-payment" text="待付款" />
       <van-grid-item icon="logistics" text="待收货" />
@@ -96,6 +96,13 @@ function userInfo() {
       userName: userName.value,
       userImg: userImg.value
     }
+  });
+}
+
+// 跳转我的订单页
+function goOrderView() {
+  $router.push({
+    name: 'order'
   });
 }
 </script>

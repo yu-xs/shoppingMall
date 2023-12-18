@@ -52,6 +52,7 @@ function goRegister() {
         password: state.userPsd,
         userImg: 'https://m.mi.com/static/img/avatar.76a75b8f17.png',
         addressList: [],
+        orderList: [],
     };
     // 将账号信息保存在LocalStorage中
     localStorage.setItem('user', JSON.stringify(user));

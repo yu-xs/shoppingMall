@@ -88,8 +88,8 @@ function goLogin() {
             localStorage.setItem('token', token);
 
             showToast('登录成功!');
-            // 跳转至我的页面
-            $router.replace({ name: 'user' });
+            // 跳转至上一个页面
+            $router.back();
         } else {
             showToast('账号或密码错误!');
             console.log('账号或密码错误!');
