@@ -160,7 +160,7 @@ function goRegisterView() {
             height: 7vh;
             outline: none;
             border: none;
-            background-color: #e2f9f4;
+            background-color: rgb(248, 248, 248);
             margin-bottom: 10px;
             padding-left: 10px;
             box-sizing: border-box;

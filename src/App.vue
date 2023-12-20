@@ -12,7 +12,6 @@ const state = reactive({
 const navList = reactive([
   { name: '首页', path: 'home', picUrl: '../public/images/icon-home.png' },
   { name: '分类', path: 'channel', picUrl: '../public/images/icon-category.png' },
-  { name: '社区', path: 'miCircle', picUrl: '../public/images/icon-star.png' },
   { name: '购物车', path: 'cart', picUrl: '../public/images/icon-cart.png' },
   { name: '我的', path: 'user', picUrl: '../public/images/icon-user.png' },
 ])

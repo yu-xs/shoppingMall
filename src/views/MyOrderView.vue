@@ -63,12 +63,12 @@ function goBack() {
     $router.replace({ name: 'user' })
 }
 
-function delOrder(goodsInfo) {
+function delOrder(goodsTypes) {
     showToast('删除成功!');
     // 从LocalStorage中删除对应的地址数据
     const userInfo = JSON.parse(localStorage.getItem('user'));
     const orderList = userInfo.orderList;
-    const index = orderList.findIndex((order) => order.goodsInfo === goodsInfo);
+    const index = orderList.findIndex((order) => order.goodsTypes === goodsTypes);
     orderList.splice(index, 1);
     localStorage.setItem('user', JSON.stringify(userInfo));
 

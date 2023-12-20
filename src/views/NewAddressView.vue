@@ -30,7 +30,7 @@ const onSave = (info) => {
     // 获取地址列表
     const userInfo = JSON.parse(localStorage.getItem('user'));
     const addressList = userInfo.addressList;
-    
+
     info.address = info.province + info.city + info.county + info.addressDetail;
     // 如果新增的地址为默认地址，则将其他地址的isDefault属性设置为false
     if (info.isDefault) {
@@ -71,7 +71,7 @@ const onChangeDetail = (val) => {
 // 返回上一页
 function goBack() {
     // 返回上一页
-    history.back()
+    $router.back()
 }
 
 // 跳转地图页

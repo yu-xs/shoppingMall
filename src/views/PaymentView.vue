@@ -102,11 +102,15 @@ function generateOrderNumber() {
     return order_number;
 }
 
+// 添加加载类名
+let addLoading = ref(false);
 async function goPayment() {
     if (!address.value) {
         showToast('请先选择地址!');
     }
     else {
+        // addLoading.value = true;
+
         const orderId = generateOrderNumber();
         // console.log(orderId, totalPrice.value, name.value, goodsInfo.value);
         if (goodsImg.value !== undefined) {
@@ -123,18 +127,18 @@ async function goPayment() {
             var data = { orderId: orderId, totalPrice: totalPrice.value, name: goodsName.value, goodsInfo: goodsInfo.value }
         }
 
-        // const res = await axios.post(
-        //     'http://localhost:8085/pay/api/payment',
-        //     data,
-        //     {
-        //         headers: {
-        //             "Content-type": "application/x-www-form-urlencoded",
-        //         }
-        //     }
-        // );
+        const res = await axios.post(
+            'http://localhost:8085/pay/api/payment',
+            data,
+            {
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded",
+                }
+            }
+        );
 
-        // console.log(res);
-        // window.location.href = res.data.result;
+        console.log(res);
+        window.location.href = res.data.result;
 
         // 将商品信息存入LocalStorage中的orderList数组
         // 获取地址列表
@@ -160,13 +164,19 @@ async function goPayment() {
                 localStorage.setItem('goods', JSON.stringify(cartListLocal));
             }
         }
-        for (const item in cartListLocal) {
-            cartCount.value += item.goodsNum;
+
+        const changedCartListLocal = JSON.parse(localStorage.getItem('goods'));
+        for (let i = 0; i <= changedCartListLocal.length - 1; i++) {
+            cartCount.value += changedCartListLocal[i].goodsNum;
+            console.log(changedCartListLocal[i].goodsNum);
         }
-        BuyCar[0] = cartCount.value
-        localStorage.setItem('BuyCar', JSON.stringify(BuyCar));
-
-
+        if (cartCount.value === 0) {
+            localStorage.removeItem('BuyCar');
+        }
+        else {
+            BuyCar[0] = cartCount.value
+            localStorage.setItem('BuyCar', JSON.stringify(BuyCar));
+        }
     }
 
 }
@@ -231,7 +241,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .payment {
-    height: 100vh;
+    height: 100%;
+    padding-bottom: 50px;
+    box-sizing: border-box;
     background-color: rgb(250, 250, 250);
 
     .van-nav-bar {

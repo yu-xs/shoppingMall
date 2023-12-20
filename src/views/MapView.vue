@@ -40,7 +40,7 @@ onMounted(() => {
 
                 setTimeout(() => {
                     $router.back();
-                }, 1000);
+                }, 1500);
             }
         } else {
             // 定位失败
