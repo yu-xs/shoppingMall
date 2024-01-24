@@ -571,7 +571,7 @@ let pt2 = (index, i) => {
 
 
 const data = () => {
-  axios.get(`https://apis.netstart.cn/xmsc/miproduct/view?commodity_id=${id.value}`)
+  axios.get(`https://apic.netstart.cn/xmsc/miproduct/view?commodity_id=${id.value}`)
     .then(response => {
 
       console.log(response.data.data)

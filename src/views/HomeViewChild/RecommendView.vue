@@ -1,11 +1,11 @@
 <template>
     <!-- 预加载图 -->
-    <div class="loading" v-show="bannerList.length < 0">
+    <div class="loading" v-show="bannerList?.length < 0">
         <img src="../../assets/navLoading.gif" />
     </div>
 
     <div class="recommend">
-        <div class="banner" v-if="bannerList.length > 0">
+        <div class="banner" v-if="bannerList?.length > 0">
             <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#82A99F">
                 <van-swipe-item v-for="i in bannerList" :key="i.material_id">
                     <img :src="`${i.img_url}`" />
@@ -19,21 +19,21 @@
             </li>
         </ul>
 
-        <div class="bigImg" v-if="bigImgList.length > 0">
+        <!-- <div class="bigImg" v-if="bigImgList?.length > 0">
             <div class="left">
                 <img :src="`${bigImgList[0].img_url}`" />
             </div>
             <div class="right">
-                <img :src="`${bigImgList[1].img_url}`" />
-                <img :src="`${bigImgList[2].img_url}`" />
+                <img v-if="bigImgList[1]?.img_url" :src="`${bigImgList[1]?.img_url}`" />
+                <img v-if="bigImgList[2]?.img_url" :src="`${bigImgList[2]?.img_url}`" />
             </div>
-        </div>
+        </div> -->
 
         <!-- 商品列表 -->
         <ul class="goods" v-if="goodsList.length > 0">
             <li v-for="i in goodsList" :key="i.product_id" @click="goDetails(i.product_id)">
-                <img :src="`${i.img_url}`" />
-                <div class="msg">
+                <img v-if="i.img_url" :src="`${i.img_url}`" />
+                <div class="msg" v-if="i.img_url">
                     <p class="title">{{ i.product_name }}</p>
                     <p class="description">{{ i.product_brief }}</p>
                     <p class="price">￥{{ i.product_price }}起</p>
@@ -45,14 +45,14 @@
 
         <!-- 电视海报 -->
         <div class="radio" v-if="radioList.length > 0">
-            <img :src="`${radioList[0].img_url}`" />
+            <img :src="`${radioList[0]?.img_url}`" />
             <div class="more">更多电视产品<van-icon name="arrow" /></div>
         </div>
 
         <!-- 笔记本电脑 -->
-        <div class="notebook" v-if="notebookPlaybill.length > 0">
-            <img :src="`${notebookPlaybill[0].img_url}`" />
-            <ul class="goods" v-if="notebookList.length > 0">
+        <div class="notebook" v-if="notebookPlaybill?.length > 0">
+            <img :src="`${notebookPlaybill[0]?.img_url}`" />
+            <ul class="goods" v-if="notebookList?.length > 0">
                 <li v-for="i in notebookList" :key="i.product_id" @click="goDetails(i.product_id)">
                     <img :src="`${i.img_url}`" />
                     <div class="msg">
@@ -67,13 +67,13 @@
         </div>
 
         <!-- 家电海报homeAppliance  -->
-        <div class="radio" v-if="homeAppliancePlaybill.length > 0">
-            <img :src="`${homeAppliancePlaybill[0].img_url}`" />
+        <div class="radio" v-if="homeAppliancePlaybill?.length > 0">
+            <img :src="`${homeAppliancePlaybill[0]?.img_url}`" />
             <div class="more">更多家电产品<van-icon name="arrow" /></div>
         </div>
 
         <!-- 智能产品 -->
-        <ul class="smart" v-if="smartList.length > 0">
+        <ul class="smart" v-if="smartList?.length > 0">
             <li v-for="i in smartList" :key="i.material_id">
                 <img :src="`${i.img_url}`" />
             </li>
@@ -81,15 +81,15 @@
         </ul>
 
         <!-- 换新海报 -->
-        <div class="radio" v-if="upgradePlaybill.length > 0">
-            <img :src="`${upgradePlaybill[0].img_url}`" />
+        <div class="radio" v-if="upgradePlaybill?.length > 0">
+            <img :src="`${upgradePlaybill[0]?.img_url}`" />
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, inject, onMounted } from 'vue'
-import {useRoute, useRouter} from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 let $route = useRoute();
 let $router = useRouter();
 
@@ -109,36 +109,36 @@ const axios = inject("$axios");
 async function getDataList() {
     console.log('请求数据')
     const data = await axios.post("/api/v1/home/page");
+    console.log(data);
+
     // 轮播图数据
-    bannerList.value = data.data.data.data.sections[0].body.items;
+    bannerList.value = data.data.data.data.sections[0]?.body.items;
     // 分类数据 
-    const category1 = data.data.data.data.sections[1].body.items;
-    const category2 = data.data.data.data.sections[2].body.items;
+    const category1 = data.data.data.data.sections[1]?.body.items;
+    const category2 = data.data.data.data.sections[2]?.body.items;
     categoryList.value = category1.concat(category2);
     // 大图商品数据
     bigImgList.value = data.data.data.data.sections[4].body.items;
     // 商品数据
-    const goods1 = data.data.data.data.sections[6].body.items;
-    const goods2 = data.data.data.data.sections[8].body.items;
-    const goods3 = data.data.data.data.sections[10].body.items;
+    const goods1 = data.data.data.data.sections[4]?.body.items;
+    const goods2 = data.data.data.data.sections[6]?.body.items;
+    const goods3 = data.data.data.data.sections[8]?.body.items;
     goodsList.value = [...goods1, ...goods2, ...goods3];
     // 电视海报数据
-    radioList.value = data.data.data.data.sections[14].body.items;
+    radioList.value = data.data.data.data.sections[12]?.body.items;
     // 笔记本海报数据
-    notebookPlaybill.value = data.data.data.data.sections[18].body.items;
+    notebookPlaybill.value = data.data.data.data.sections[16]?.body.items;
     // 笔记本列表数据
-    notebookList.value = data.data.data.data.sections[20].body.items;
+    notebookList.value = data.data.data.data.sections[18]?.body.items;
     // 家电海报数据
-    homeAppliancePlaybill.value = data.data.data.data.sections[24].body.items;
+    homeAppliancePlaybill.value = data.data.data.data.sections[24]?.body.items;
     // 智能产品数据
-    const smart1 = data.data.data.data.sections[29].body.items;
-    const smart2 = data.data.data.data.sections[31].body.items;
-    const smart3 = data.data.data.data.sections[33].body.items;
+    const smart1 = data.data.data.data.sections[27]?.body.items;
+    const smart2 = data.data.data.data.sections[29]?.body.items;
+    const smart3 = data.data.data.data.sections[31]?.body.items;
     smartList.value = [...smart1, ...smart2, ...smart3];
     // 以旧换新
-    upgradePlaybill.value = data.data.data.data.sections[35].body.items;
-
-    console.log(data.data.data.data);
+    upgradePlaybill.value = data.data.data.data.sections[33]?.body.items;
 
 }
 
@@ -207,22 +207,20 @@ onMounted(() => {
 
     .bigImg {
         width: 100%;
-        height: 265px;
         background-color: rgb(250, 250, 250);
         display: flex;
         justify-content: space-between;
         border-radius: 5px;
         overflow: hidden;
-        margin-bottom: 10px;
+        margin: 10px 0;
 
         .left {
             flex: 0 1 49%;
-            height: 100%;
         }
 
         .left img {
             width: 100%;
-            height: 100%;
+            vertical-align: bottom;
             border-radius: 5px;
         }
 
@@ -236,14 +234,12 @@ onMounted(() => {
 
         .right img {
             width: 100%;
-            height: 100%;
-            height: 50%;
             border-radius: 5px;
         }
 
-        .right img:first-child {
-            margin-bottom: 8px;
-        }
+        // .right img:first-child {
+        //     margin-bottom: 8px;
+        // }
     }
 
     .goods {
@@ -265,6 +261,7 @@ onMounted(() => {
 
     .goods li img {
         width: 100%;
+        margin-bottom: 5px;
         border-radius: 5px;
     }
 

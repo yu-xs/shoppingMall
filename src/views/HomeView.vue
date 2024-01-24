@@ -51,13 +51,13 @@ onMounted(() => {
     <!-- 搜索栏 -->
     <div class="search">
       <div class="logo">
-        <img src="../assets/home-logo.png" />
+        <img src="../assets/logo01.png" />
       </div>
       <div class="searchInp">
         <van-search shape="round" background="transparent" placeholder="请输入搜索关键词" :to="{ name: 'search' }" />
       </div>
       <div class="user" @click="goUserView">
-        <img src="../../public/images/icon-user.png" />
+        <img src="../assets/icon-user.png" />
       </div>
     </div>
 
@@ -123,9 +123,10 @@ onMounted(() => {
     align-items: center;
 
     .logo img {
-      width: 30px;
-      height: 30px;
-      border-radius: 5px;
+      width: 22px;
+      margin-left: 5px;
+      // height: 30px;
+      // border-radius: 5px;
     }
 
     .searchInp {

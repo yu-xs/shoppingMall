@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+    "deploy": "npm run build && gh-pages -d dist",
+    "lint": "eslint --ext .js,.ts,.vue src"
   },
   "dependencies": {
     "@types/swiper": "^6.0.0",
@@ -26,6 +28,7 @@
     "@vant/auto-import-resolver": "^1.0.2",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/tsconfig": "^0.4.0",
+    "gh-pages": "^6.1.0",
     "http-proxy-middleware": "^2.0.6",
     "npm-run-all2": "^6.1.1",
     "sass": "^1.69.5",

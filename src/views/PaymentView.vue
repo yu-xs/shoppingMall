@@ -241,7 +241,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .payment {
-    height: 100%;
+    height: 100vh;
+    overflow: auto;
     padding-bottom: 50px;
     box-sizing: border-box;
     background-color: rgb(250, 250, 250);

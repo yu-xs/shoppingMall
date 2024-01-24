@@ -246,7 +246,7 @@ onMounted(() => {
         flex: 0 1 100%;
         max-height: 100%;
         margin-left: 80px;
-        background-color: #c5e6dd;
+        background-color: #fff;
         overflow: hidden;
         overflow-y: scroll;
     }

@@ -10,10 +10,10 @@ const state = reactive({
 });
 
 const navList = reactive([
-  { name: '首页', path: 'home', picUrl: '../public/images/icon-home.png' },
-  { name: '分类', path: 'channel', picUrl: '../public/images/icon-category.png' },
-  { name: '购物车', path: 'cart', picUrl: '../public/images/icon-cart.png' },
-  { name: '我的', path: 'user', picUrl: '../public/images/icon-user.png' },
+  { name: '首页', path: 'home', picUrl: '../src/assets/icon-home.png' },
+  { name: '分类', path: 'channel', picUrl: '../src/assets/icon-category.png' },
+  { name: '购物车', path: 'cart', picUrl: '../src/assets/icon-cart.png' },
+  { name: '我的', path: 'user', picUrl: '../src/assets/icon-user.png' },
 ])
 
 function activeIndex(i) {

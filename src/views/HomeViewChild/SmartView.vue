@@ -88,25 +88,29 @@ async function getDataList() {
     const streamer1 = data.data.data.data.sections[5].body.items;
     const streamer2 = data.data.data.data.sections[7].body.items;
     const streamer3 = data.data.data.data.sections[9].body.items;
+    const streamer7 = data.data.data.data.sections[17].body.items;
+    const streamer8 = data.data.data.data.sections[19].body.items;
+    const travel1 = data.data.data.data.sections[21].body.items;
+    const travel2 = data.data.data.data.sections[23].body.items;
+
     const streamer4 = data.data.data.data.sections[11].body.items;
     const streamer5 = data.data.data.data.sections[13].body.items;
     const streamer6 = data.data.data.data.sections[15].body.items;
-    const streamer7 = data.data.data.data.sections[17].body.items;
-    const streamer8 = data.data.data.data.sections[19].body.items;
-    streamerList.value = [...streamer1, ...streamer2, ...streamer3, ...streamer4, ...streamer5, ...streamer6, ...streamer7, ...streamer8,];
-    // 便捷出行数据
-    const travel1 = data.data.data.data.sections[21].body.items;
-    const travel2 = data.data.data.data.sections[23].body.items;
-    travelsList.value = [...travel1, ...travel2];
+    // streamerList.value = [...streamer7, ...streamer8,];
+    // ...streamer1, ...streamer2, ...streamer3,  ...travel1, ...travel2,
+    // ...streamer5, ...streamer6,
+    // ...streamer2_Sec, ...streamer3_Sec
     // 横幅数据2
     const streamer1_Sec = data.data.data.data.sections[25].body.items;
     const streamer2_Sec = data.data.data.data.sections[27].body.items;
     const streamer3_Sec = data.data.data.data.sections[29].body.items;
-    streamerList_Sec.value = [...streamer1_Sec, ...streamer2_Sec, ...streamer3_Sec];
+    // 便捷出行数据
+    travelsList.value = [...streamer4, ...streamer1_Sec,];
+    // streamerList_Sec.value = [];
     // 便捷出行数据2
-    travelsList_Sec.value = data.data.data.data.sections[31].body.items;
+    travelsList_Sec.value = data.data.data.data.sections[33].body.items;
     // 底部海报
-    playbill.value = data.data.data.data.sections[33].body.items;
+    playbill.value = data.data.data.data.sections[35].body.items;
     console.log(playbill);
 
 }
